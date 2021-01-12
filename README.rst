@@ -3,10 +3,10 @@ Orthanc Server Extensions
 =========================
 
 
-.. image:: https://img.shields.io/pypi/v/orthanc_server_extensions.svg
-        :target: https://pypi.python.org/pypi/orthanc_server_extensions
+.. image:: https://img.shields.io/pypi/v/orthanc-server-extensions.svg
+        :target: https://pypi.python.org/pypi/orthanc-server-extensions
 
-.. image:: https://img.shields.io/travis/walcovanloon/orthanc_server_extensions.svg
+.. image:: https://img.shields.io/travis/walcovanloon/orthanc-server-extensions.svg
         :target: https://travis-ci.com/walcovanloon/orthanc-server-extensions
 
 .. image:: https://readthedocs.org/projects/orthanc-server-extensions/badge/?version=latest
@@ -30,7 +30,7 @@ A simple Orthanc python plugin based framework to extend Orthanc’s feature set
 Features
 --------
 
-* TODO
+* run (integration) tests for your Orthanc python scripts
 
 Credits
 -------

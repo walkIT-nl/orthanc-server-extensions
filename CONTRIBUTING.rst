@@ -15,7 +15,7 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://github.com/walcovanloon/orthanc_server_extensions/issues.
+Report bugs at https://github.com/walkit-nl/orthanc-server-extensions/issues.
 
 If you are reporting a bug, please include:
 
@@ -45,7 +45,7 @@ articles, and such.
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
-The best way to send feedback is to file an issue at https://github.com/walcovanloon/orthanc_server_extensions/issues.
+The best way to send feedback is to file an issue at https://github.com/walkit-nl/orthanc-server-extensions/issues.
 
 If you are proposing a feature:
 
@@ -57,17 +57,17 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up `orthanc_server_extensions` for local development.
+Ready to contribute? Here's how to set up `orthanc-server-extensions` for local development.
 
-1. Fork the `orthanc_server_extensions` repo on GitHub.
+1. Fork the `orthanc-server-extensions` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:your_name_here/orthanc_server_extensions.git
+    $ git clone git@github.com:your_name_here/orthanc-server-extensions.git
 
 3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
 
-    $ mkvirtualenv orthanc_server_extensions
-    $ cd orthanc_server_extensions/
+    $ mkvirtualenv orthanc-server-extensions
+    $ cd orthanc-server-extensions/
     $ python setup.py develop
 
 4. Create a branch for local development::
@@ -79,7 +79,7 @@ Ready to contribute? Here's how to set up `orthanc_server_extensions` for local 
 5. When you're done making changes, check that your changes pass flake8 and the
    tests, including testing other Python versions with tox::
 
-    $ flake8 orthanc_server_extensions tests
+    $ flake8 orthanc_ext tests
     $ python setup.py test or pytest
     $ tox
 
@@ -102,8 +102,8 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 3.5, 3.6, 3.7 and 3.8, and for PyPy. Check
-   https://travis-ci.com/walcovanloon/orthanc_server_extensions/pull_requests
+3. The pull request should work for Python 3.6, 3.7 and 3.8, and for PyPy. Check
+   https://travis-ci.com/walkit-nl/orthanc-server-extensions/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
 Tips
@@ -111,7 +111,7 @@ Tips
 
 To run a subset of tests::
 
-$ pytest tests.test_orthanc_server_extensions
+$ pytest tests.test_orthanc_ext
 
 
 Deploying

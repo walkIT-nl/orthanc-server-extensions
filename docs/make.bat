@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=orthanc_server_extensions
+set SPHINXPROJ=orthanc-server-extensions
 
 if "%1" == "" goto help
 

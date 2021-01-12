@@ -12,7 +12,7 @@ To install Orthanc Server Extensions, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install orthanc_server_extensions
+    $ pip install orthanc-server-extensions
 
 This is the preferred method to install Orthanc Server Extensions, as it will always install the most recent stable release.
 
@@ -32,13 +32,13 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/walcovanloon/orthanc_server_extensions
+    $ git clone git://github.com/walkit-nl/orthanc-server-extensions
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl -OJL https://github.com/walcovanloon/orthanc_server_extensions/tarball/master
+    $ curl -OJL https://github.com/walkit-nl/orthanc-server-extensions/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/walcovanloon/orthanc_server_extensions
-.. _tarball: https://github.com/walcovanloon/orthanc_server_extensions/tarball/master
+.. _Github repo: https://github.com/walkit-nl/orthanc-server-extensions
+.. _tarball: https://github.com/walkit-nl/orthanc-server-extensions/tarball/master

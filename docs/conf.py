@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Orthanc Server Extensions'
+project = 'Orthanc Server Python Extensions'
 copyright = "2021, WalkIT"
 author = "WalkIT"
 

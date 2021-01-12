@@ -1,5 +1,5 @@
 Welcome to Orthanc Server Extensions's documentation!
-======================================
+=====================================================
 
 .. toctree::
    :maxdepth: 2
