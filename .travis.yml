@@ -25,5 +25,5 @@ deploy:
     secure: Gpty7uvewMEewpS66ogUNHWxwhYnAC+0u2qBVYPyyVKEv2DOiAfINi7k3TzLwfhF/vGix7sCcKK26/xX+naE4Aa+J6nCqqrOvYjF6bHHcSDPiRgl+4RKaCu6rb32x+slEwxF8fLtsadPT1ccad4/VSdBIMS2Dv6SVUmTVA9nIUyifIg62byXUfx3Aw6Me/8qc1riSZA9BTKO4BnQhAveWhPNhTmyr9yujTvGIw0OAFTt7LNnnsO7oNwK6Z9TJNZd2V4ABYTe5zYxOx0sDFHE6MfkuwOeDe2Az3oPFCNfHpou0nebDIE82CSe6hBfQSy9GaGynbE9zBnswnrIoXOwQTLQJ5QcvJz8FRUM5QdBQnpaAJLOTdMdYPegnnzTVt7EnlAUTehZsbosZDa2lKuVlFsmNdF1K3gARBMes9cT1L9g2VMrbt0CgVsnjfPmOmpqxZ4xYOFvIjuAPG6D4tK5kkjq/NwotyBzcR+fFCizeQL1yMIqblAB4laRGkF4/LaS1UZiKNTO+DDBNyHCL8tsxhHfdCyfvzlK7jhNPLFHkGVps/XVP+DA0/LWywUwXOgQ61hTarF0jQY6987EWYx4Wf1/Yoa8k54TNWzRjvamFRWc2akbXsOq6Mv78iYq7P2/EbbyYqMnkBEn4QDLSnwAax0+Z5xoA6ShSI737fO6w7I=
   on:
     branch: main
-    repo: walkit-NL/orthanc-server-extensions
+    repo: walkIT-nl//orthanc-server-extensions
     python: 3.8
