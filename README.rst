@@ -6,8 +6,8 @@ Orthanc Server Extensions
 .. image:: https://img.shields.io/pypi/v/orthanc-server-extensions.svg
         :target: https://pypi.python.org/pypi/orthanc-server-extensions
 
-.. image:: https://img.shields.io/travis/walcovanloon/orthanc-server-extensions.svg
-        :target: https://travis-ci.com/walcovanloon/orthanc-server-extensions
+.. image:: https://img.shields.io/travis/walkIT-nl/orthanc-server-extensions.svg
+        :target: https://travis-ci.com/walkIT-nl/orthanc-server-extensions
 
 .. image:: https://readthedocs.org/projects/orthanc-server-extensions/badge/?version=latest
         :target: https://orthanc-server-extensions.readthedocs.io/en/latest/?badge=latest
@@ -15,7 +15,7 @@ Orthanc Server Extensions
 
 
 .. image:: https://pyup.io/repos/github/walkit/orthanc-server-extensions/shield.svg
-     :target: https://pyup.io/repos/github/walcovanloon/orthanc-server-extensionss/
+     :target: https://pyup.io/repos/github/walkIT-nl/orthanc-server-extensionss/
      :alt: Updates
 
 
