@@ -1,28 +1,16 @@
-# Config file for automatic testing at travis-ci.com
-
 language: python
 python:
-  - 3.8
-  - 3.7
-  - 3.6
-  - 3.5
-
-# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+- 3.8
+- 3.7
+- 3.6
 install: pip install -U tox-travis
-
-# Command to run tests, e.g. python setup.py test
 script: tox
-
-# Assuming you have installed the travis-ci CLI tool, after you
-# create the Github repo and add it to Travis, run the
-# following command to finish PyPI deployment setup:
-# $ travis encrypt --add deploy.password
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
   username: __token__
   password:
-    secure: Gpty7uvewMEewpS66ogUNHWxwhYnAC+0u2qBVYPyyVKEv2DOiAfINi7k3TzLwfhF/vGix7sCcKK26/xX+naE4Aa+J6nCqqrOvYjF6bHHcSDPiRgl+4RKaCu6rb32x+slEwxF8fLtsadPT1ccad4/VSdBIMS2Dv6SVUmTVA9nIUyifIg62byXUfx3Aw6Me/8qc1riSZA9BTKO4BnQhAveWhPNhTmyr9yujTvGIw0OAFTt7LNnnsO7oNwK6Z9TJNZd2V4ABYTe5zYxOx0sDFHE6MfkuwOeDe2Az3oPFCNfHpou0nebDIE82CSe6hBfQSy9GaGynbE9zBnswnrIoXOwQTLQJ5QcvJz8FRUM5QdBQnpaAJLOTdMdYPegnnzTVt7EnlAUTehZsbosZDa2lKuVlFsmNdF1K3gARBMes9cT1L9g2VMrbt0CgVsnjfPmOmpqxZ4xYOFvIjuAPG6D4tK5kkjq/NwotyBzcR+fFCizeQL1yMIqblAB4laRGkF4/LaS1UZiKNTO+DDBNyHCL8tsxhHfdCyfvzlK7jhNPLFHkGVps/XVP+DA0/LWywUwXOgQ61hTarF0jQY6987EWYx4Wf1/Yoa8k54TNWzRjvamFRWc2akbXsOq6Mv78iYq7P2/EbbyYqMnkBEn4QDLSnwAax0+Z5xoA6ShSI737fO6w7I=
+    secure: BWETOR65pK+FcRexuUd+I6QtBpxRoqGCKj4Lkj4bChzg482pJ/hu7bJs2VVXqifd3b0+oqcASR8y1p13E2+RufSH9Ehf1/x0pW+UGh+4sgoqs0OiybJ3wyrraZ5WC1XE744pccwF0euIUb64a4oU+DPoNiWGdmNGzcUf59SpIwAhtuoz9pAcIwchWuB0X4hgxiM72Dc3YrT1mnPYFdG4irWlVm93obwmV+5xMPN2scRmXHbf8dJjVz+3ng9OgV2x0h3k5hMaJTKdkA1HBXH0bwaD4+Ti1z2IwezdXBhnA7wN3nv9u3vx9MBpzkuC+yinqSQOHJGdamzOfB4aq/bwZWHjPqkVRu0TlyovBzgqdfT/82lII7Q2VjqrdrBLHxxAyAFUqrrNkV69GGcdTTRk2AVYK1ktOxf1FiSn8uHbOEkw+w3OBdFkYO6bZC1gmZkVOVAgJuDywdjAqYrjloz3wwXlkNrCjBPq9oiOVH4pag5fWCAs4HlbW46cjxG+1r2WxH/1Jgi+jfs2YD/fk6SX2bSUJev5vJg2aTKymfiP+KjMWoOGqjc9x+3DZgPvvCgMgbCA99cLRSW+5vmTHFZTnD4M0wLmFk+8h52RIOZ53gdNauJVPYFGPPgSo9Jy/HXfrGePdSRwcJXBUYitOxJOdsLrHCpPnhtRfUpdtyqvtd0=
   on:
     branch: main
     repo: walkIT-nl/orthanc-server-extensions
