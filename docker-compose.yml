@@ -1,0 +1,15 @@
+services:
+    orthanc:
+        image: osimis/orthanc
+        build:
+            context: .
+        environment:
+            VERBOSE: "true"
+
+            ORTHANC__PYTHON_VERBOSE: "true"
+            ORTHANC__VERBOSE: "true"
+            ORTHANC__PYTHON_SCRIPT: "/python/entry_point.py"
+
+        ports:
+            - "127.0.0.1:4242:4242"
+            - "127.0.0.1:8042:8042"

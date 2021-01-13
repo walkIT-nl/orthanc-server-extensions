@@ -6,7 +6,7 @@ Orthanc Server Extensions
 .. image:: https://img.shields.io/pypi/v/orthanc-server-extensions.svg
         :target: https://pypi.python.org/pypi/orthanc-server-extensions
 
-.. image:: https://img.shields.io/travis/walkIT-nl/orthanc-server-extensions.svg
+.. image:: https://travis-ci.com/walkIT-nl/orthanc-server-extensions.svg?branch=main
         :target: https://travis-ci.com/walkIT-nl/orthanc-server-extensions
 
 .. image:: https://readthedocs.org/projects/orthanc-server-extensions/badge/?version=latest
@@ -31,6 +31,12 @@ Features
 --------
 
 * run (integration) tests for your Orthanc python scripts
+
+
+Running
+-------
+
+`docker-compose up --build` should greet you with 'orthanc started event handled!' message
 
 Credits
 -------
