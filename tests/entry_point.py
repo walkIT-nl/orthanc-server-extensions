@@ -5,14 +5,14 @@ from orthanc_ext import event_dispatcher
 import orthanc
 
 
-def log_event(event):
-    def log_event_impl(change, level, resource, orthanc):
+def log_event():
+    def log_event_impl(event, orthanc):
         orthanc.LogWarning(f"orthanc '{event}' event handled!")
 
     return log_event_impl
 
 
 event_dispatcher.register_event_handlers({
-    orthanc.ChangeType.ORTHANC_STARTED: log_event("started"),
-    orthanc.ChangeType.ORTHANC_STOPPED: log_event("stopped")
+    orthanc.ChangeType.ORTHANC_STARTED: log_event(),
+    orthanc.ChangeType.ORTHANC_STOPPED: log_event()
 }, orthanc_module=orthanc)
