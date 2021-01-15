@@ -13,8 +13,8 @@ orthanc = OrthancApiHandler()
 @dataclass
 class ChangeEvent:
     change: orthanc.ChangeType = orthanc.ChangeType.UNKNOWN
-    level: str = ""
-    resource_id: str = ""
+    resource_type: int = orthanc.ResourceType.NONE
+    resource_id: str = None
 
 
 def capture(event):
@@ -37,6 +37,20 @@ def test_registered_callback_should_be_triggered_on_change_event():
 
     assert event.resource_id == "resource-uuid"
     assert event.resource_type == orthanc.ResourceType.STUDY
+
+
+def test_all_registered_callbacks_should_be_triggered_on_change_event():
+    event1 = ChangeEvent()
+    event2 = ChangeEvent()
+
+    event_dispatcher.register_event_handlers({
+        orthanc.ChangeType.STABLE_STUDY: [capture(event1), capture(event2)]
+    }, orthanc_module=orthanc)
+
+    orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, "resource-uuid")
+
+    assert event1.resource_id is not None
+    assert event2.resource_id is not None
 
 
 def test_no_registered_callbacks_should_be_reported_in_on_change_event(caplog):
