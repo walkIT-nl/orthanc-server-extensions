@@ -76,6 +76,11 @@ class OrthancApiHandler(object):
         response.raise_for_status()
         return response.text
 
+    def RestApiDelete(self, path):
+        response = self.session.delete(f'{self.base_url}{path}', verify=False)
+        response.raise_for_status()
+        return response.text
+
     def RegisterOnChangeCallback(self, change_callback):
         self.change_callback = change_callback
 
