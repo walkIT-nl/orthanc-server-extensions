@@ -12,7 +12,11 @@ def log_event():
     return log_event_impl
 
 
+def start_maintenance_cycle(event, orthanc):
+    orthanc.LogWarning(f"do something special on {event}")
+
+
 event_dispatcher.register_event_handlers({
-    orthanc.ChangeType.ORTHANC_STARTED: log_event(),
+    orthanc.ChangeType.ORTHANC_STARTED: [log_event(), start_maintenance_cycle()],
     orthanc.ChangeType.ORTHANC_STOPPED: log_event()
 }, orthanc_module=orthanc)

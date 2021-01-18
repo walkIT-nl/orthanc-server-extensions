@@ -15,7 +15,7 @@ Orthanc Server Extensions
 
 
 .. image:: https://pyup.io/repos/github/walkit/orthanc-server-extensions/shield.svg
-     :target: https://pyup.io/repos/github/walkIT-nl/orthanc-server-extensionss/
+     :target: https://pyup.io/repos/github/walkIT-nl/orthanc-server-extensions/
      :alt: Updates
 
 
