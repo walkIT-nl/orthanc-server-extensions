@@ -30,9 +30,13 @@ def register_event_handlers(event_handlers, orthanc_module):
 
     def OnChange(change_type, resource_type, resource_id):
         handlers = event_handlers.get(change_type, [unhandled_event_logger])
+        threads = []
         for handler in handlers:
             event = ChangeEvent(change_type, resource_type, resource_id)
-            t = threading.Timer(0, function=handler, args=(event, orthanc_module))
-            t.start()
+            threads.append(threading.Timer(0, function=handler, args=(event, orthanc_module)))
+
+        for thread in threads:
+            thread.start()
+            thread.join()
 
     orthanc_module.RegisterOnChangeCallback(OnChange)
