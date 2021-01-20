@@ -1,3 +1,4 @@
+import threading
 from collections.abc import Iterable
 from dataclasses import dataclass
 
@@ -31,6 +32,7 @@ def register_event_handlers(event_handlers, orthanc_module):
         handlers = event_handlers.get(change_type, [unhandled_event_logger])
         for handler in handlers:
             event = ChangeEvent(change_type, resource_type, resource_id)
-            handler(event, orthanc=orthanc_module)
+            t = threading.Timer(0, function=handler, args=(event, orthanc_module))
+            t.start()
 
     orthanc_module.RegisterOnChangeCallback(OnChange)

@@ -1,5 +1,6 @@
 import logging
 import re
+from time import sleep
 
 import requests
 from attr import dataclass
@@ -15,13 +16,15 @@ class ChangeEvent:
     change: orthanc.ChangeType = orthanc.ChangeType.UNKNOWN
     resource_type: int = orthanc.ResourceType.NONE
     resource_id: str = None
+    orthanc = None
 
 
 def capture(event):
-    def capture_impl(incoming_event, orthanc):
+    def capture_impl(incoming_event, local_orthanc):
         event.change = incoming_event.change_type
         event.resource_type = incoming_event.resource_type
         event.resource_id = incoming_event.resource_id
+        event.orthanc = local_orthanc
 
     return capture_impl
 
@@ -37,6 +40,7 @@ def test_registered_callback_should_be_triggered_on_change_event():
 
     assert event.resource_id == "resource-uuid"
     assert event.resource_type == orthanc.ResourceType.STUDY
+    assert event.orthanc is not None
 
 
 def test_all_registered_callbacks_should_be_triggered_on_change_event():
