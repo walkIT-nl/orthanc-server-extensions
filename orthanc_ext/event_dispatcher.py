@@ -1,6 +1,7 @@
 import threading
 from collections.abc import Iterable
 from dataclasses import dataclass
+import logging
 
 
 def register_event_handlers(event_handlers, orthanc_module):
@@ -26,7 +27,7 @@ def register_event_handlers(event_handlers, orthanc_module):
     event_handlers = {k: ensure_iterable(v) for k, v in event_handlers.items()}
 
     def unhandled_event_logger(event, orthanc):
-        orthanc.LogInfo(f'no handler registered for {event_types[event.change_type]}')
+        logging.info(f'no handler registered for {event_types[event.change_type]}')
 
     def OnChange(change_type, resource_type, resource_id):
         handlers = event_handlers.get(change_type, [unhandled_event_logger])
