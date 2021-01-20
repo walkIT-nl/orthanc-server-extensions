@@ -12,6 +12,6 @@ deploy:
   password:
     secure: BWETOR65pK+FcRexuUd+I6QtBpxRoqGCKj4Lkj4bChzg482pJ/hu7bJs2VVXqifd3b0+oqcASR8y1p13E2+RufSH9Ehf1/x0pW+UGh+4sgoqs0OiybJ3wyrraZ5WC1XE744pccwF0euIUb64a4oU+DPoNiWGdmNGzcUf59SpIwAhtuoz9pAcIwchWuB0X4hgxiM72Dc3YrT1mnPYFdG4irWlVm93obwmV+5xMPN2scRmXHbf8dJjVz+3ng9OgV2x0h3k5hMaJTKdkA1HBXH0bwaD4+Ti1z2IwezdXBhnA7wN3nv9u3vx9MBpzkuC+yinqSQOHJGdamzOfB4aq/bwZWHjPqkVRu0TlyovBzgqdfT/82lII7Q2VjqrdrBLHxxAyAFUqrrNkV69GGcdTTRk2AVYK1ktOxf1FiSn8uHbOEkw+w3OBdFkYO6bZC1gmZkVOVAgJuDywdjAqYrjloz3wwXlkNrCjBPq9oiOVH4pag5fWCAs4HlbW46cjxG+1r2WxH/1Jgi+jfs2YD/fk6SX2bSUJev5vJg2aTKymfiP+KjMWoOGqjc9x+3DZgPvvCgMgbCA99cLRSW+5vmTHFZTnD4M0wLmFk+8h52RIOZ53gdNauJVPYFGPPgSo9Jy/HXfrGePdSRwcJXBUYitOxJOdsLrHCpPnhtRfUpdtyqvtd0=
   on:
-    branch: main
+    tags: true
     repo: walkIT-nl/orthanc-server-extensions
     python: 3.8
