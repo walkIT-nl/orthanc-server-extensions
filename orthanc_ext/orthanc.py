@@ -81,6 +81,9 @@ class OrthancApiHandler(object):
         response.raise_for_status()
         return response.text
 
+    def GenerateRestApiAuthorizationToken(self):
+        return ""
+
     def RegisterOnChangeCallback(self, change_callback):
         self.change_callback = change_callback
 
