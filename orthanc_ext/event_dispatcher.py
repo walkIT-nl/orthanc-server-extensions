@@ -1,10 +1,29 @@
-import threading
+import json
 from collections.abc import Iterable
 from dataclasses import dataclass
 import logging
+from requests_toolbelt import sessions
 
 
-def register_event_handlers(event_handlers, orthanc_module):
+def create_internal_requests_session(base_url, token):
+    session = sessions.BaseUrlSession(base_url)
+    session.headers['Authorization'] = token
+    session.verify = False  # internal traffic only
+    return session
+
+
+def get_rest_api_base_url(orthanc):
+    conf = json.loads(orthanc.GetConfiguration())
+    port = conf.get('HttpPort', 8042)
+    scheme = 'https' if conf.get('SslEnabled', False) else 'http'
+    return f'{scheme}://localhost:{port}/'
+
+
+def create_session(orthanc):
+    return create_internal_requests_session(get_rest_api_base_url(orthanc), orthanc.GenerateRestApiAuthorizationToken())
+
+
+def register_event_handlers(event_handlers, orthanc_module, requests_session):
     @dataclass
     class ChangeEvent:
         change_type: int
@@ -31,13 +50,8 @@ def register_event_handlers(event_handlers, orthanc_module):
 
     def OnChange(change_type, resource_type, resource_id):
         handlers = event_handlers.get(change_type, [unhandled_event_logger])
-        threads = []
         for handler in handlers:
             event = ChangeEvent(change_type, resource_type, resource_id)
-            threads.append(threading.Timer(0, function=handler, args=(event, orthanc_module)))
-
-        for thread in threads:
-            thread.start()
-            thread.join()
+            handler(event, requests_session)
 
     orthanc_module.RegisterOnChangeCallback(OnChange)

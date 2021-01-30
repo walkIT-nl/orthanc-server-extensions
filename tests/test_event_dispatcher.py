@@ -34,7 +34,7 @@ def test_registered_callback_should_be_triggered_on_change_event():
 
     event_dispatcher.register_event_handlers({
         orthanc.ChangeType.STABLE_STUDY: capture(event)
-    }, orthanc_module=orthanc)
+    }, orthanc_module=orthanc, requests_session=requests)
 
     orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, "resource-uuid")
 
@@ -49,7 +49,7 @@ def test_all_registered_callbacks_should_be_triggered_on_change_event():
 
     event_dispatcher.register_event_handlers({
         orthanc.ChangeType.STABLE_STUDY: [capture(event1), capture(event2)]
-    }, orthanc_module=orthanc)
+    }, orthanc_module=orthanc, requests_session=requests)
 
     orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, "resource-uuid")
 
@@ -60,7 +60,7 @@ def test_all_registered_callbacks_should_be_triggered_on_change_event():
 def test_no_registered_callbacks_should_be_reported_in_on_change_event(caplog):
     caplog.set_level(logging.INFO)
 
-    event_dispatcher.register_event_handlers({}, orthanc_module=orthanc)
+    event_dispatcher.register_event_handlers({}, orthanc_module=orthanc, requests_session=requests)
     orthanc.on_change(orthanc.ChangeType.ORTHANC_STARTED, '', '')
 
     assert "no handler registered for ORTHANC_STARTED" in caplog.text

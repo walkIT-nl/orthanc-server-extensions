@@ -3,11 +3,7 @@ This module implements the Orthanc Python plugin API to run requests against an 
 
 This will allow you quickly evolve your python scripts and make them easy to integration test as well.
 """
-from dataclasses import dataclass
-
-import requests
-
-import logging
+import uuid
 
 
 class OrthancApiHandler(object):
@@ -44,45 +40,8 @@ class OrthancApiHandler(object):
         # not defined by orthanc
         UNKNOWN = 999
 
-    def __init__(self, session=requests.Session()):
-        self.session = session
-        self.base_url = "https://localhost:8042"
-
-        def default_callback():
-            raise NotImplemented("change_callback")
-
-        self.change_callback = default_callback
-
-    def LogWarning(self, message):
-        logging.log(logging.WARNING, message)
-
-    def LogInfo(self, message):
-        logging.log(logging.INFO, message)
-
-    def HttpPost(self, path, body, headers):
-        response = self.session.post(path, body, headers=headers, verify=False)
-        response.raise_for_status()
-        return response.text
-
-    def RestApiPost(self, path, body):
-        calculated_path = f'{self.base_url}{path}'
-
-        response = self.session.post(calculated_path, body, verify=False)
-        response.raise_for_status()
-        return response.text
-
-    def RestApiGet(self, path):
-        response = self.session.get(f'{self.base_url}{path}', verify=False)
-        response.raise_for_status()
-        return response.text
-
-    def RestApiDelete(self, path):
-        response = self.session.delete(f'{self.base_url}{path}', verify=False)
-        response.raise_for_status()
-        return response.text
-
     def GenerateRestApiAuthorizationToken(self):
-        return ""
+        return uuid.uuid4()
 
     def RegisterOnChangeCallback(self, change_callback):
         self.change_callback = change_callback
