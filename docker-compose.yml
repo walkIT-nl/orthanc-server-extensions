@@ -6,6 +6,7 @@ services:
             VERBOSE: "true"
 
             ORTHANC__PYTHON_VERBOSE: "true"
+            ORTHANC__HTTP_PORT: 8042
             ORTHANC__VERBOSE: "true"
             ORTHANC__PYTHON_SCRIPT: "/python/entry_point.py"
 
