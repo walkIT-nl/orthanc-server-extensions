@@ -26,7 +26,7 @@ def register_event_handlers(event_handlers, orthanc_module):
     event_types = {v: k for k, v in orthanc_module.ChangeType.__dict__.items() if hashable(v)}
     event_handlers = {k: ensure_iterable(v) for k, v in event_handlers.items()}
 
-    def unhandled_event_logger(event, orthanc):
+    def unhandled_event_logger(event, _):
         logging.info(f'no handler registered for {event_types[event.change_type]}')
 
     def OnChange(change_type, resource_type, resource_id):
