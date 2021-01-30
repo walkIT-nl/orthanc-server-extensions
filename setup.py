@@ -10,11 +10,11 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['requests', 'dataclasses']
+requirements = ['requests', 'requests_toolbelt', 'dataclasses']
 
 setup_requirements = ['pytest-runner', ]
 
-test_requirements = ['pytest>=3', 'responses' ]
+test_requirements = ['pytest>=3', 'responses']
 
 setup(
     author="WalkIT",
