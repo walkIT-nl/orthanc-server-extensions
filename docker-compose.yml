@@ -1,8 +1,7 @@
 services:
     orthanc:
-        image: osimis/orthanc
-        build:
-            context: .
+        image: local/orthanc
+        build: .
         environment:
             VERBOSE: "true"
 
