@@ -72,7 +72,7 @@ def test_shall_return_values_from_executed_handlers():
     def get_system_info(_, session):
         return session.get('http://localhost:8042/system').json()
 
-    event_dispatcher.register_event_handlers({orthanc.ChangeType.STABLE_STUDY: get_system_info}, orthanc_module=orthanc,
+    event_dispatcher.register_event_handlers({orthanc.ChangeType.ORTHANC_STARTED: get_system_info}, orthanc_module=orthanc,
                                              requests_session=requests)
     system_info, = orthanc.on_change(orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, '')
     assert system_info.get('Version') == '1.9.0'
