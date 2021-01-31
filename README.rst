@@ -23,19 +23,22 @@ A simple Orthanc python plugin based framework to extend Orthanc’s feature set
 
 Features
 --------
-
 * run (integration) tests for your Orthanc python scripts
+* currently supports handling of `change events`_
 
 
 Running
 -------
 
-`docker-compose up --build` should greet you with 'orthanc started event handled!' message
+``docker-compose up --build`` should greet you with 'orthanc started event handled!' message
 
 Credits
 -------
 
+This project would obviously not exist without Orthanc, its documentation and its community.
+
 This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
+.. _change events: https://book.orthanc-server.com/plugins/python.html#listening-to-changes).
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
