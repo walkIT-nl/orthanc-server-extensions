@@ -1,8 +1,7 @@
 import logging
-import re
-from time import sleep
 
 import requests
+import responses
 from attr import dataclass
 
 from orthanc_ext import event_dispatcher
@@ -66,7 +65,20 @@ def test_no_registered_callbacks_should_be_reported_in_on_change_event(caplog):
     assert "no handler registered for ORTHANC_STARTED" in caplog.text
 
 
-def test_event_should_have_human_readable_representation(caplog):
+@responses.activate
+def test_shall_return_values_from_executed_handlers():
+    responses.add(responses.GET, 'http://localhost:8042/system', json={'Version': '1.9.0'})
+
+    def get_system_info(_, session):
+        return session.get('http://localhost:8042/system').json()
+
+    event_dispatcher.register_event_handlers({orthanc.ChangeType.STABLE_STUDY: get_system_info}, orthanc_module=orthanc,
+                                             requests_session=requests)
+    system_info, = orthanc.on_change(orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, '')
+    assert system_info.get('Version') == '1.9.0'
+
+
+def test_event_shall_have_human_readable_representation(caplog):
     caplog.set_level(logging.INFO)
 
     def log_event(evt, _):

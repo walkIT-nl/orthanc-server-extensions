@@ -61,8 +61,10 @@ def register_event_handlers(event_handlers, orthanc_module, requests_session):
 
     def OnChange(change_type, resource_type, resource_id):
         handlers = event_handlers.get(change_type, [unhandled_event_logger])
+        return_values = []
         for handler in handlers:
             event = ChangeEvent(change_type, resource_type, resource_id)
-            handler(event, requests_session)
+            return_values.append(handler(event, requests_session))
+        return return_values
 
     orthanc_module.RegisterOnChangeCallback(OnChange)
