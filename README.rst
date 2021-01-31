@@ -30,7 +30,8 @@ Features
 Running
 -------
 
-``docker-compose up --build`` should greet you with 'orthanc started event handled!' message
+``docker-compose up --build`` should greet you with 'orthanc started event handled!' message and provides the first boilerplate
+to get started.
 
 Credits
 -------
