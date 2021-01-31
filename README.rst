@@ -14,7 +14,8 @@ Orthanc Server Extensions
         :alt: Documentation Status
 
 
-A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts.
+A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts. It focusses on
+integration and orchestration scripts, like study routing, event notifications and audit logging.
 
 
 * Free software: GNU Affero General Public License v3
@@ -26,12 +27,25 @@ Features
 * run (integration) tests for your Orthanc python scripts
 * currently supports handling of `change events`_
 
+Why this library was written
+----------------------------
+
+Improve developer happiness: the development roundtrip is just a little bit long to build, run and test a function, even with Docker.
+With this library, you can start from the unit tests, move to integration tests, and then deploy the result in the Docker image.
+
+Enable testability: the Orthanc API is provided as a module which is not easy to mock in a clean way.
+Orthanc server extensions provide a few simple abstractions that keep functions clean and independently testable.
+
+Requests was chosen as a base library to access the Orthanc API, rather than orthanc.RestApi*, because it is well known,
+developer friendly, and external API access avoids deadlocks in the Python plugin (before this was solved in 3.1).
+
 
 Running
 -------
 
 ``docker-compose up --build`` should greet you with 'orthanc started event handled!' message and provides the first boilerplate
 to get started.
+
 
 Credits
 -------
