@@ -5,22 +5,27 @@ import logging
 from requests_toolbelt import sessions
 
 
-def create_internal_requests_session(base_url, token):
+def create_internal_requests_session(base_url, token, cert=False):
     session = sessions.BaseUrlSession(base_url)
     session.headers['Authorization'] = token
-    session.verify = False  # internal traffic only
+    session.verify = cert
     return session
 
 
-def get_rest_api_base_url(orthanc):
-    conf = json.loads(orthanc.GetConfiguration())
-    port = conf.get('HttpPort', 8042)
-    scheme = 'https' if conf.get('SslEnabled', False) else 'http'
+def get_rest_api_base_url(config):
+    port = config.get('HttpPort', 8042)
+    scheme = 'https' if config.get('SslEnabled', False) else 'http'
     return f'{scheme}://localhost:{port}/'
 
 
+def get_certificate(config):
+    return config.get('SslCertificate', False)
+
+
 def create_session(orthanc):
-    return create_internal_requests_session(get_rest_api_base_url(orthanc), orthanc.GenerateRestApiAuthorizationToken())
+    config = json.loads(orthanc.GetConfiguration())
+    return create_internal_requests_session(get_rest_api_base_url(config),
+                                            orthanc.GenerateRestApiAuthorizationToken(), get_certificate(config))
 
 
 def register_event_handlers(event_handlers, orthanc_module, requests_session):
