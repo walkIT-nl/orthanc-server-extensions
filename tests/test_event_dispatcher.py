@@ -64,3 +64,17 @@ def test_no_registered_callbacks_should_be_reported_in_on_change_event(caplog):
     orthanc.on_change(orthanc.ChangeType.ORTHANC_STARTED, '', '')
 
     assert "no handler registered for ORTHANC_STARTED" in caplog.text
+
+
+def test_event_should_have_human_readable_representation(caplog):
+    caplog.set_level(logging.INFO)
+
+    def log_event(evt, _):
+        logging.info(evt)
+
+    event_dispatcher.register_event_handlers({orthanc.ChangeType.STABLE_STUDY: log_event}, orthanc_module=orthanc,
+                                             requests_session=requests)
+    orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'uuid')
+
+    assert 'change_type=STABLE_STUDY' in caplog.text
+    assert 'resource_type=STUDY' in caplog.text

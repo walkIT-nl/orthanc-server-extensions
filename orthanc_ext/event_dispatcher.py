@@ -36,7 +36,8 @@ def register_event_handlers(event_handlers, orthanc_module, requests_session):
         resource_id: str
 
         def __str__(self):
-            return f"ChangeEvent(change_type={event_types.get(self.change_type)}, resource_type={self.resource_type}, resource_id='{self.resource_id}')"
+            return f"ChangeEvent(change_type={event_types.get(self.change_type)}, " \
+                   f"resource_type={resource_types.get(self.resource_type)}, resource_id='{self.resource_id}')"
 
     def ensure_iterable(v):
         return v if isinstance(v, Iterable) else [v]
@@ -47,7 +48,12 @@ def register_event_handlers(event_handlers, orthanc_module, requests_session):
         except TypeError:
             return False
 
-    event_types = {v: k for k, v in orthanc_module.ChangeType.__dict__.items() if hashable(v)}
+    def create_type_index(orthanc_type):
+        return {v: k for k, v in orthanc_type.__dict__.items() if hashable(v)}
+
+    event_types = create_type_index(orthanc_module.ChangeType)
+    resource_types = create_type_index(orthanc_module.ResourceType)
+
     event_handlers = {k: ensure_iterable(v) for k, v in event_handlers.items()}
 
     def unhandled_event_logger(event, _):
