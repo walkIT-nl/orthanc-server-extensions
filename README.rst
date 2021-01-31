@@ -14,12 +14,6 @@ Orthanc Server Extensions
         :alt: Documentation Status
 
 
-.. image:: https://pyup.io/repos/github/walkit/orthanc-server-extensions/shield.svg
-     :target: https://pyup.io/repos/github/walkIT-nl/orthanc-server-extensions/
-     :alt: Updates
-
-
-
 A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts.
 
 
