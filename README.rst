@@ -23,7 +23,7 @@ Orthanc Server Extensions
 A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts.
 
 
-* Free software: GNU General Public License v3
+* Free software: GNU Affero General Public License v3
 * Documentation: https://orthanc-server-extensions.readthedocs.io.
 
 
