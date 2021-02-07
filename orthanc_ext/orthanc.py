@@ -40,7 +40,8 @@ class OrthancApiHandler(object):
         # not defined by orthanc
         UNKNOWN = 999
 
-    def GenerateRestApiAuthorizationToken(self):
+    @staticmethod
+    def GenerateRestApiAuthorizationToken():
         return uuid.uuid4()
 
     def RegisterOnChangeCallback(self, change_callback):
