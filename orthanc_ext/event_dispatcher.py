@@ -30,7 +30,7 @@ def register_event_handlers(event_handlers, orthanc_module, requests_session):
     event_handlers = {k: ensure_iterable(v) for k, v in event_handlers.items()}
 
     def unhandled_event_logger(event, _):
-        logging.info(f'no handler registered for {event_types[event.change_type]}')
+        logging.debug(f'no handler registered for {event_types[event.change_type]}')
 
     def OnChange(change_type, resource_type, resource_id):
         handlers = event_handlers.get(change_type, [unhandled_event_logger])
