@@ -2,4 +2,4 @@
 
 __author__ = """WalkIT"""
 __email__ = 'code@walkit.nl'
-__version__ = '3.1.1'
+__version__ = '3.1.2'
