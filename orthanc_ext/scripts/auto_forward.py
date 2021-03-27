@@ -17,7 +17,7 @@ def forward_dicom(matchers: Iterable[DicomReceivedMatcher]):
         for matcher in matchers:
             if matcher.matches(resource_id, session):
                 modality = matcher.modality_selector(resource_id, session)
-                resp = session.post(f'/modalities/{modality}/store', json=[f'"{resource_id}"'])
+                resp = session.post(f'/modalities/{modality}/store', json=[resource_id])
                 resp.raise_for_status()
                 logging.info(f"DICOM export to modality '{modality}' started for resource '{resource_id}'")
 
