@@ -19,16 +19,16 @@ test_requirements = ['pytest>=3', 'responses']
 setup(
     author="WalkIT",
     author_email='code@walkit.nl',
-    python_requires='>=3.5',
+    python_requires='>=3.7',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU Affero General Public License v3',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     description="A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts.",
     install_requires=requirements,
@@ -44,4 +44,5 @@ setup(
     url='https://github.com/walkIT-nl/orthanc-server-extensions',
     version='3.1.5',
     zip_safe=False,
+
 )
