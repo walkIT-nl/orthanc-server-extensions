@@ -2,12 +2,31 @@ import logging
 from enum import Enum
 
 
-def configure_orthanc_log_format(default_level=logging.INFO):
+def python_logging(_, default_level=logging.INFO):
+    """Configures python logging.
+    Useful when Orthanc is using stderr and stdout handlers: offers more log levels and a better date format"""
     fmt = "%(levelname)s %(asctime)s %(filename)s:%(lineno)s] %(message)s"
     logging.basicConfig(format=fmt)
     logger = logging.getLogger()
     logger.setLevel(default_level)
     return fmt
+
+
+def orthanc_logging(orthanc_module, _=logging.INFO):
+    """Configures orthanc logging. Useful when orthanc is configured to write to a log file"""
+    logging.getLogger().addHandler(OrthancLogHandler(orthanc_module))
+
+
+class OrthancLogHandler(logging.Handler):
+    def __init__(self, orthanc_module):
+        logging.Handler.__init__(self)
+        self.orthanc_module = orthanc_module
+        self.log_func_mapping = {logging.INFO: orthanc_module.LogInfo, logging.WARNING: orthanc_module.LogWarning,
+                                 logging.ERROR: orthanc_module.LogError, logging.CRITICAL: orthanc_module.LogError}
+
+    def emit(self, record: logging.LogRecord) -> None:
+        self.log_func_mapping.get(record.levelno, self.orthanc_module.LogInfo)(
+            logging.Formatter(fmt="[%(filename)s:%(lineno)s] %(message)s").format(record))
 
 
 class OrthancLevel(Enum):

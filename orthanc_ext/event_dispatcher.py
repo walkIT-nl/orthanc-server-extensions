@@ -3,14 +3,14 @@ import logging
 
 from dataclasses import dataclass
 
-from orthanc_ext.logging_configurator import configure_orthanc_log_format
+from orthanc_ext.logging_configurator import orthanc_logging
 from orthanc_ext.python_utilities import ensure_iterable, create_reverse_type_dict
 from orthanc_ext.requests_utilities import create_internal_requests_session, get_rest_api_base_url, get_certificate
 
-configure_orthanc_log_format()
 
+def register_event_handlers(event_handlers, orthanc_module, requests_session, logging_configuration=orthanc_logging):
+    logging_configuration(orthanc_module)
 
-def register_event_handlers(event_handlers, orthanc_module, requests_session):
     @dataclass
     class ChangeEvent:
         change_type: int

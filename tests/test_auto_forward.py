@@ -3,6 +3,7 @@ import logging
 import responses
 
 from orthanc_ext import event_dispatcher
+from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.orthanc_utilities import get_metadata_of_first_instance_of_series
 from orthanc_ext.scripts.auto_forward import forward_dicom, DicomReceivedMatcher
@@ -49,7 +50,7 @@ def register_and_trigger_handler(matchers):
     event_dispatcher.register_event_handlers(
         {
             orthanc.ChangeType.STABLE_STUDY: forward_dicom(matchers)
-        }, orthanc_module=orthanc, requests_session=session)
+        }, orthanc_module=orthanc, requests_session=session, logging_configuration=python_logging)
     orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, '', 'study-uuid')
 
 
