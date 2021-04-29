@@ -12,9 +12,11 @@ def python_logging(_, default_level=logging.INFO):
     return fmt
 
 
-def orthanc_logging(orthanc_module, _=logging.INFO):
+def orthanc_logging(orthanc_module, default_level=logging.INFO):
     """Configures orthanc logging. Useful when orthanc is configured to write to a log file"""
-    logging.getLogger().addHandler(OrthancLogHandler(orthanc_module))
+    logger = logging.getLogger()
+    logger.setLevel(default_level)
+    logger.addHandler(OrthancLogHandler(orthanc_module))
 
 
 class OrthancLogHandler(logging.Handler):

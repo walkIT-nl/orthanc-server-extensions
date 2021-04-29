@@ -3,6 +3,7 @@ import logging
 import responses
 
 from orthanc_ext import event_dispatcher
+from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.auto_retries import handle_failed_forwarding_job, calculate_delay, ONE_MINUTE, ONE_DAY
 
@@ -62,8 +63,6 @@ def test_calculate_delay_shall_retry_every_day():
 
 @responses.activate
 def test_should_not_resubmit_other_job_types(caplog):
-    caplog.set_level(logging.DEBUG)
-
     job = {
         'CreationTime': '20210210T084350.430751',
         'CompletionTime': '20210210T224350.430751',
@@ -78,7 +77,10 @@ def test_should_not_resubmit_other_job_types(caplog):
         },
         orthanc_module=orthanc,
         requests_session=session,
+        logging_configuration=python_logging,
     )
+    caplog.set_level(logging.DEBUG)
+
     orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')
 
     assert caplog.messages == ["not retrying 'CreateDicomZip' job 'job-uuid'"]
@@ -86,8 +88,6 @@ def test_should_not_resubmit_other_job_types(caplog):
 
 @responses.activate
 def test_on_failure_should_resubmit_job(caplog):
-    caplog.set_level(logging.DEBUG)
-
     responses.add(
         responses.GET,
         'https://localhost:8042/jobs/job-uuid',
@@ -107,7 +107,10 @@ def test_on_failure_should_resubmit_job(caplog):
         },
         orthanc_module=orthanc,
         requests_session=session,
+        logging_configuration=python_logging,
     )
+
+    caplog.set_level(logging.DEBUG)
     orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')
 
     assert caplog.messages == ["resubmitting job 'job-uuid' after 2 seconds"]

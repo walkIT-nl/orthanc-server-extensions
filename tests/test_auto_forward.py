@@ -14,7 +14,6 @@ session = event_dispatcher.create_internal_requests_session('https://localhost:8
 
 @responses.activate
 def test_autoforward_on_match_shall_start_start_modality_store(caplog):
-    caplog.set_level(logging.INFO)
     responses.add(responses.POST, 'https://localhost:8042/modalities/pacs/store', body='study-uuid', status=200)
 
     register_and_trigger_handler([DicomReceivedMatcher(lambda uid, _: True, lambda uid, _: 'pacs')])
