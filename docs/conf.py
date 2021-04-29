@@ -19,9 +19,10 @@
 #
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath('..'))
 
-import orthanc_ext
+import orthanc_ext  # noqa:  E402
 
 # -- General configuration ---------------------------------------------
 
@@ -47,8 +48,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Orthanc Server Python Extensions'
-copyright = "2021, WalkIT"
-author = "WalkIT"
+copyright = '2021, WalkIT'
+author = 'WalkIT'
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -77,7 +78,6 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
-
 # -- Options for HTML output -------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -96,12 +96,10 @@ html_theme = 'alabaster'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-
 # -- Options for HTMLHelp output ---------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'orthanc_server_extensionsdoc'
-
 
 # -- Options for LaTeX output ------------------------------------------
 
@@ -109,15 +107,12 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
-
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
-
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
-
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
@@ -127,22 +122,14 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'orthanc_ext.tex',
-     'Orthanc Server Extensions Documentation',
-     'WalkIT', 'manual'),
+    (master_doc, 'orthanc_ext.tex', 'Orthanc Server Extensions Documentation', 'WalkIT', 'manual'),
 ]
-
 
 # -- Options for manual page output ------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'orthanc_ext',
-     'Orthanc Server Extensions Documentation',
-     [author], 1)
-]
-
+man_pages = [(master_doc, 'orthanc_ext', 'Orthanc Server Extensions Documentation', [author], 1)]
 
 # -- Options for Texinfo output ----------------------------------------
 
@@ -150,13 +137,13 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'orthanc_ext',
-     'Orthanc Server Extensions Documentation',
-     author,
-     'orthanc_ext',
-     'One line description of project.',
-     'Miscellaneous'),
+    (
+        master_doc,
+        'orthanc_ext',
+        'Orthanc Server Extensions Documentation',
+        author,
+        'orthanc_ext',
+        'One line description of project.',
+        'Miscellaneous',
+    ),
 ]
-
-
-

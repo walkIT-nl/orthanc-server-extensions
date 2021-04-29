@@ -5,7 +5,7 @@ from enum import Enum
 def python_logging(_, default_level=logging.INFO):
     """Configures python logging.
     Useful when Orthanc is using stderr and stdout handlers: offers more log levels and a better date format"""
-    fmt = "%(levelname)s %(asctime)s %(filename)s:%(lineno)s] %(message)s"
+    fmt = '%(levelname)s %(asctime)s %(filename)s:%(lineno)s] %(message)s'
     logging.basicConfig(format=fmt)
     logger = logging.getLogger()
     logger.setLevel(default_level)
@@ -21,12 +21,17 @@ class OrthancLogHandler(logging.Handler):
     def __init__(self, orthanc_module):
         logging.Handler.__init__(self)
         self.orthanc_module = orthanc_module
-        self.log_func_mapping = {logging.INFO: orthanc_module.LogInfo, logging.WARNING: orthanc_module.LogWarning,
-                                 logging.ERROR: orthanc_module.LogError, logging.CRITICAL: orthanc_module.LogError}
+        self.log_func_mapping = {
+            logging.INFO: orthanc_module.LogInfo,
+            logging.WARNING: orthanc_module.LogWarning,
+            logging.ERROR: orthanc_module.LogError,
+            logging.CRITICAL: orthanc_module.LogError,
+        }
 
     def emit(self, record: logging.LogRecord) -> None:
         self.log_func_mapping.get(record.levelno, self.orthanc_module.LogInfo)(
-            logging.Formatter(fmt="[%(filename)s:%(lineno)s] %(message)s").format(record))
+            logging.Formatter(fmt='[%(filename)s:%(lineno)s] %(message)s').format(record)
+        )
 
 
 class OrthancLevel(Enum):

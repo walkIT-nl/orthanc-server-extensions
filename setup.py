@@ -12,12 +12,14 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ['requests', 'requests_toolbelt', 'dataclasses']
 
-setup_requirements = ['pytest-runner', ]
+setup_requirements = [
+    'pytest-runner',
+]
 
 test_requirements = ['pytest>=3', 'responses']
 
 setup(
-    author="WalkIT",
+    author='WalkIT',
     author_email='code@walkit.nl',
     python_requires='>=3.7',
     classifiers=[
@@ -30,9 +32,10 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],
-    description="A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts.",
+    description="A simple Orthanc python plugin based framework to extend Orthanc's feature set with testable python "
+    'scripts.',
     install_requires=requirements,
-    license="GNU Affero General Public License v3",
+    license='GNU Affero General Public License v3',
     long_description=readme + '\n\n' + history,
     include_package_data=True,
     keywords='orthanc testing',
@@ -44,5 +47,4 @@ setup(
     url='https://github.com/walkIT-nl/orthanc-server-extensions',
     version='3.1.7',
     zip_safe=False,
-
 )

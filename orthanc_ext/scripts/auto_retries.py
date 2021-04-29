@@ -7,7 +7,7 @@ ONE_HOUR = ONE_MINUTE * 60
 ONE_DAY = 24 * ONE_HOUR
 
 
-def handle_failed_forwarding_job(first_retry=ONE_MINUTE, job_types=['DicomModalityStore']):
+def handle_failed_forwarding_job(first_retry=ONE_MINUTE, job_types=('DicomModalityStore',)):
     def handle_failed_forwarding_job(event, session):
         job_id = event.resource_id
         resp = session.get(f'/jobs/{job_id}')
@@ -21,9 +21,7 @@ def handle_failed_forwarding_job(first_retry=ONE_MINUTE, job_types=['DicomModali
 
         delay = calculate_delay(job, first_retry)
         logging.debug(f"resubmitting job '{job_id}' after {delay} seconds")
-        timer = threading.Timer(interval=delay,
-                                function=resubmit_job,
-                                args=[session, job_id, delay])
+        timer = threading.Timer(interval=delay, function=resubmit_job, args=[session, job_id, delay])
         timer.start()
 
     return handle_failed_forwarding_job
