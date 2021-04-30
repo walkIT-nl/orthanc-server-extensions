@@ -1,4 +1,4 @@
-from requests_toolbelt import sessions
+import httpx
 
 
 def get_rest_api_base_url(config):
@@ -11,8 +11,9 @@ def get_certificate(config):
     return config.get('SslCertificate', False)
 
 
-def create_internal_requests_session(base_url, token, cert=False):
-    session = sessions.BaseUrlSession(base_url)
-    session.headers['Authorization'] = token
-    session.verify = cert
-    return session
+def create_internal_requests_session(
+        base_url, token='', cert=None) -> httpx.Client:
+    return httpx.Client(
+        base_url=base_url,
+        verify=cert if cert is not None else False,
+        headers={'Authorization': token})
