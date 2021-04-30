@@ -10,13 +10,19 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['requests', 'requests_toolbelt', 'dataclasses']
+requirements = [
+    'dataclasses',
+    'httpx',
+    ]
 
 setup_requirements = [
     'pytest-runner',
-]
+    ]
 
-test_requirements = ['pytest>=3', 'responses']
+test_requirements = [
+    'pytest>=3', 
+    'respx',
+    ]
 
 setup(
     author='WalkIT',
@@ -32,15 +38,19 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],
-    description="A simple Orthanc python plugin based framework to extend Orthanc's feature set with testable python "
-    'scripts.',
+    description=(
+        "An Orthanc python plugin based framework to extend Orthanc's "
+        "feature set with testable Python scripts "),
     install_requires=requirements,
     license='GNU Affero General Public License v3',
     long_description=readme + '\n\n' + history,
     include_package_data=True,
     keywords='orthanc testing',
     name='orthanc-server-extensions',
-    packages=find_packages(include=['orthanc_ext', 'orthanc_ext.*']),
+    packages=find_packages(
+        include=[
+            'orthanc_ext', 
+            'orthanc_ext.*']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,

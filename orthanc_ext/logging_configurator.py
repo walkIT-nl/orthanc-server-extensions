@@ -3,8 +3,9 @@ from enum import Enum
 
 
 def python_logging(_, default_level=logging.INFO):
-    """Configures python logging.
-    Useful when Orthanc is using stderr and stdout handlers: offers more log levels and a better date format"""
+    """Configures python logging. Useful when Orthanc is using stderr and
+    stdout handlers: offers more log levels and a better date format.
+    """
     fmt = '%(levelname)s %(asctime)s %(filename)s:%(lineno)s] %(message)s'
     logging.basicConfig(format=fmt)
     logger = logging.getLogger()
@@ -13,7 +14,8 @@ def python_logging(_, default_level=logging.INFO):
 
 
 def orthanc_logging(orthanc_module, default_level=logging.INFO):
-    """Configures orthanc logging. Useful when orthanc is configured to write to a log file"""
+    """Configures orthanc logging. Useful when orthanc is configured to write
+    to a log file."""
     logger = logging.getLogger()
     logger.setLevel(default_level)
     logger.addHandler(OrthancLogHandler(orthanc_module))
