@@ -45,6 +45,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/walkIT-nl/orthanc-server-extensions',
-    version='3.1.8',
+    version='3.1.9',
     zip_safe=False,
 )
