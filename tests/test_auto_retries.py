@@ -6,10 +6,10 @@ from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.auto_retries import (
     handle_failed_forwarding_job, calculate_delay, ONE_MINUTE, ONE_DAY)
-from orthanc_ext.requests_utilities import create_internal_requests_session
+from orthanc_ext.http_utilities import create_internal_session
 
 orthanc = OrthancApiHandler()
-session = create_internal_requests_session('https://localhost:8042')
+session = create_internal_session('https://localhost:8042')
 
 
 def test_calculate_delay():

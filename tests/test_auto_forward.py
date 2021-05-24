@@ -6,10 +6,10 @@ from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.orthanc_utilities import (get_metadata_of_first_instance_of_series)
 from orthanc_ext.scripts.auto_forward import (forward_dicom, DicomReceivedMatcher)
-from orthanc_ext.requests_utilities import create_internal_requests_session
+from orthanc_ext.http_utilities import create_internal_session
 
 orthanc = OrthancApiHandler()
-session = create_internal_requests_session('https://localhost:8042')
+session = create_internal_session('https://localhost:8042')
 
 
 def register_and_trigger_handler(matchers):
