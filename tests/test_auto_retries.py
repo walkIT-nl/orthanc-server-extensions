@@ -21,7 +21,8 @@ def test_calculate_delay():
             'InstancesCount': 1,
             'LocalAet': 'ORTHANC',
             'ParentResources': ['3121d449-9b15610c-df9b8396-bee611db-3901f794'],
-            'RemoteAet': 'PYNETDICOM'},
+            'RemoteAet': 'PYNETDICOM'
+        },
         'CreationTime': '20210210T084350.430751',
         'EffectiveRuntime': 0.036999999999999998,
         'ErrorCode': 9,
@@ -31,44 +32,40 @@ def test_calculate_delay():
         'Progress': 0,
         'State': 'Failure',
         'Timestamp': '20210210T090925.594915',
-        'Type': 'DicomModalityStore'}
+        'Type': 'DicomModalityStore'
+    }
     assert calculate_delay(job) == 686
 
 
 def test_calculate_delay_shall_not_retry_too_aggressively():
     # interval first try: 1 second
-    job = {
-        'CreationTime': '20210210T084350.430751', 
-        'CompletionTime': '20210210T084351.430751'}
+    job = {'CreationTime': '20210210T084350.430751', 'CompletionTime': '20210210T084351.430751'}
     assert calculate_delay(job) == ONE_MINUTE
 
 
 def test_calculate_delay_shall_use_back_off():
     # time between previous tries: 3 minutes
-    job = {
-        'CreationTime': '20210210T084350.430751', 
-        'CompletionTime': '20210210T084650.430751'}
+    job = {'CreationTime': '20210210T084350.430751', 'CompletionTime': '20210210T084650.430751'}
     assert calculate_delay(job) == 6 * ONE_MINUTE
 
-    job = {
-        'CreationTime': '20210210T084350.430751', 
-        'CompletionTime': '20210210T085250.430751'}
+    job = {'CreationTime': '20210210T084350.430751', 'CompletionTime': '20210210T085250.430751'}
     assert calculate_delay(job) == 18 * ONE_MINUTE
 
 
 def test_calculate_delay_shall_retry_every_day():
-    job = {
-        'CreationTime': '20210210T084350.430751', 
-        'CompletionTime': '20210210T224350.430751'}
+    job = {'CreationTime': '20210210T084350.430751', 'CompletionTime': '20210210T224350.430751'}
     assert calculate_delay(job) == ONE_DAY
 
 
 @respx.mock
 def test_should_not_resubmit_other_job_types(caplog):
-    job = respx.get('/jobs/job-uuid').respond(200, json={
-        'CreationTime': '20210210T084350.430751',
-        'CompletionTime': '20210210T224350.430751',
-        'Type': 'CreateDicomZip'})
+    job = respx.get('/jobs/job-uuid').respond(
+        200,
+        json={
+            'CreationTime': '20210210T084350.430751',
+            'CompletionTime': '20210210T224350.430751',
+            'Type': 'CreateDicomZip'
+        })
     event_dispatcher.register_event_handlers(
         {orthanc.ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},
         orthanc,
@@ -83,10 +80,13 @@ def test_should_not_resubmit_other_job_types(caplog):
 @respx.mock
 def test_on_failure_should_resubmit_job(caplog):
     # TODO: figure out why expectation not met in Timer thread.
-    job = respx.get('/jobs/job-uuid').respond(200, json={
-        'CreationTime': '20210210T084350.430751',
-        'CompletionTime': '20210210T084351.430751',
-        'Type': 'DicomModalityStore'})
+    job = respx.get('/jobs/job-uuid').respond(
+        200,
+        json={
+            'CreationTime': '20210210T084350.430751',
+            'CompletionTime': '20210210T084351.430751',
+            'Type': 'DicomModalityStore'
+        })
     resubmit = respx.post('/jobs/job-uuid/resubmit').respond(200)
     event_dispatcher.register_event_handlers(
         {orthanc.ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},

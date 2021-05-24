@@ -3,7 +3,6 @@ import httpx
 
 from orthanc_ext.orthanc import OrthancApiHandler
 
-
 orthanc = OrthancApiHandler()
 
 
@@ -12,7 +11,8 @@ def test_change_type_list_should_be_complete():
 
     assert len(events) > 16
     for event in events:
-        assert orthanc.ChangeType.__dict__.get(event) is not None, f'{event} should be added on {orthanc.ChangeType}'
+        assert orthanc.ChangeType.__dict__.get(
+            event) is not None, f'{event} should be added on {orthanc.ChangeType}'
 
 
 def test_resource_type_list_should_be_complete():
@@ -21,8 +21,8 @@ def test_resource_type_list_should_be_complete():
     assert len(events) > 4
     for event in events:
         assert (
-            orthanc.ResourceType.__dict__.get(event) is not None
-        ), f"'{event} should be added on {orthanc.ResourceType}"
+            orthanc.ResourceType.__dict__.get(event)
+            is not None), f"'{event} should be added on {orthanc.ResourceType}"
 
 
 def get_type_enum_values(type_under_test):

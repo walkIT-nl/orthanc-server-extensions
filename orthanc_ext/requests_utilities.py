@@ -11,8 +11,7 @@ def get_certificate(config):
     return config.get('SslCertificate', False)
 
 
-def create_internal_requests_session(
-        base_url, token='', cert=None) -> httpx.Client:
+def create_internal_requests_session(base_url, token='', cert=None) -> httpx.Client:
     return httpx.Client(
         base_url=base_url,
         verify=cert if cert is not None else False,

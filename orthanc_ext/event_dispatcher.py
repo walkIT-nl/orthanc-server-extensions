@@ -4,17 +4,13 @@ import logging
 from dataclasses import dataclass
 
 from orthanc_ext.logging_configurator import orthanc_logging
-from orthanc_ext.python_utilities import (
-    ensure_iterable, create_reverse_type_dict)
+from orthanc_ext.python_utilities import (ensure_iterable, create_reverse_type_dict)
 from orthanc_ext.requests_utilities import (
     create_internal_requests_session, get_rest_api_base_url, get_certificate)
 
 
 def register_event_handlers(
-        event_handlers, 
-        orthanc_module, 
-        client, 
-        logging_configuration=orthanc_logging):
+        event_handlers, orthanc_module, client, logging_configuration=orthanc_logging):
     logging_configuration(orthanc_module)
 
     @dataclass
@@ -54,6 +50,5 @@ def register_event_handlers(
 def create_session(orthanc):
     config = json.loads(orthanc.GetConfiguration())
     return create_internal_requests_session(
-        get_rest_api_base_url(config), 
-        orthanc.GenerateRestApiAuthorizationToken(), 
+        get_rest_api_base_url(config), orthanc.GenerateRestApiAuthorizationToken(),
         get_certificate(config))

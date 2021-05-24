@@ -22,6 +22,7 @@ def orthanc_logging(orthanc_module, default_level=logging.INFO):
 
 
 class OrthancLogHandler(logging.Handler):
+
     def __init__(self, orthanc_module):
         logging.Handler.__init__(self)
         self.orthanc_module = orthanc_module
@@ -34,8 +35,7 @@ class OrthancLogHandler(logging.Handler):
 
     def emit(self, record: logging.LogRecord) -> None:
         self.log_func_mapping.get(record.levelno, self.orthanc_module.LogInfo)(
-            logging.Formatter(fmt='[%(filename)s:%(lineno)s] %(message)s').format(record)
-        )
+            logging.Formatter(fmt='[%(filename)s:%(lineno)s] %(message)s').format(record))
 
 
 class OrthancLevel(Enum):

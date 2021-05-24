@@ -22,8 +22,7 @@ def forward_dicom(matchers: Iterable[DicomReceivedMatcher]):
                     f'"{resource_id}" not forwarded')
                 continue
             modality = matcher.modality_selector(resource_id, client)
-            resp = client.post(
-                f'/modalities/{modality}/store', json=[resource_id])
+            resp = client.post(f'/modalities/{modality}/store', json=[resource_id])
             resp.raise_for_status()
             logging.info(
                 f'DICOM export to modality "{modality}" started for '
