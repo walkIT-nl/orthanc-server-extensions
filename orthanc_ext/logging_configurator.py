@@ -48,5 +48,5 @@ class OrthancLevel(Enum):
         self.python_level = python_level
 
 
-def configure_log_level(session, level: OrthancLevel):
-    session.put('/tools/log-level-plugins', level.value)
+def configure_log_level(client, level: OrthancLevel):
+    client.put('/tools/log-level-plugins', level.value)

@@ -22,8 +22,8 @@ def start_maintenance_cycle(event, _):
     logging.info(f'do something special on "{event}"')
 
 
-def show_system_info(_, session):
-    version = session.get('/system').json().get('Version')
+def show_system_info(_, client):
+    version = client.get('/system').json().get('Version')
     logging.warning(f'orthanc version retrieved: "{version}"', )
 
 
@@ -31,4 +31,4 @@ event_dispatcher.register_event_handlers({
     orthanc.ChangeType.ORTHANC_STARTED:
         [log_event('started'), start_maintenance_cycle, show_system_info],
     orthanc.ChangeType.ORTHANC_STOPPED: log_event('stopped')
-}, orthanc, orthanc_ext.event_dispatcher.create_session(orthanc))
+}, orthanc, orthanc_ext.event_dispatcher.create_client(orthanc))

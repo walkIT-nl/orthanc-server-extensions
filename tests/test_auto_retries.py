@@ -6,10 +6,10 @@ from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.auto_retries import (
     handle_failed_forwarding_job, calculate_delay, ONE_MINUTE, ONE_DAY)
-from orthanc_ext.http_utilities import create_internal_session
+from orthanc_ext.http_utilities import create_internal_client
 
 orthanc = OrthancApiHandler()
-session = create_internal_session('https://localhost:8042')
+client = create_internal_client('https://localhost:8042')
 
 
 def test_calculate_delay():
@@ -69,7 +69,7 @@ def test_should_not_resubmit_other_job_types(caplog):
     event_dispatcher.register_event_handlers(
         {orthanc.ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},
         orthanc,
-        session,
+        client,
         logging_configuration=python_logging)
     caplog.set_level(logging.DEBUG)
     orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')
@@ -91,7 +91,7 @@ def test_on_failure_should_resubmit_job(caplog):
     event_dispatcher.register_event_handlers(
         {orthanc.ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},
         orthanc,
-        session,
+        client,
         logging_configuration=python_logging)
     caplog.set_level(logging.DEBUG)
     orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')

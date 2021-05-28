@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from orthanc_ext.logging_configurator import orthanc_logging
 from orthanc_ext.python_utilities import (ensure_iterable, create_reverse_type_dict)
 from orthanc_ext.http_utilities import (
-    create_internal_session, get_rest_api_base_url, get_certificate)
+    create_internal_client, get_rest_api_base_url, get_certificate)
 
 
 def register_event_handlers(
@@ -22,8 +22,8 @@ def register_event_handlers(
         def __str__(self):
             return (
                 f'ChangeEvent(change_type={event_types.get(self.change_type)}, '
-                f"resource_type={resource_types.get(self.resource_type)}, resource_id='{self.resource_id}')"
-            )
+                f'resource_type={resource_types.get(self.resource_type)}, '
+                f'resource_id="{self.resource_id}")')
 
     def create_type_index(orthanc_type):
         return create_reverse_type_dict(orthanc_type)
@@ -47,8 +47,8 @@ def register_event_handlers(
     orthanc_module.RegisterOnChangeCallback(OnChange)
 
 
-def create_session(orthanc):
+def create_client(orthanc):
     config = json.loads(orthanc.GetConfiguration())
-    return create_internal_session(
+    return create_internal_client(
         get_rest_api_base_url(config), orthanc.GenerateRestApiAuthorizationToken(),
         get_certificate(config))

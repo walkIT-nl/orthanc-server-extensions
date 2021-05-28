@@ -62,8 +62,8 @@ def test_no_registered_callbacks_should_be_reported_in_on_change_event(caplog):
 def test_shall_return_values_from_executed_handlers():
     system = respx.get('/system').respond(200, json={'Version': '1.9.0'})
 
-    def get_system_info(_, session):
-        return session.get('http://localhost:8042/system').json()
+    def get_system_info(_, client):
+        return client.get('http://localhost:8042/system').json()
 
     event_dispatcher.register_event_handlers(
         {orthanc.ChangeType.ORTHANC_STARTED: get_system_info}, orthanc, httpx)
