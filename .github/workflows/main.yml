@@ -9,9 +9,9 @@ jobs:
       matrix:
         config:
         # [Python version, tox env]
+        - ["3.9",   "py39"]
         - ["3.8",   "py38"]
         - ["3.7",   "py37"]
-        - ["3.6",   "py36"]
     runs-on: ubuntu-latest
     name: ${{ matrix.config[1] }}
     steps:
