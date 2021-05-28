@@ -1,7 +1,7 @@
 name: Health Data Interop Gateway build and tests
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
 jobs:
   build:
