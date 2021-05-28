@@ -13,8 +13,8 @@ Orthanc Server Extensions
         :target: https://orthanc-server-extensions.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://github.com/walkIT-nl/orthanc-server-extensions/actions/workflows/main.yml
-        :target: https://github.com/walkIT-nl/orthanc-server-extensions/actions/workflows/main.yml/badge.svg
+.. image:: https://github.com/walkIT-nl/orthanc-server-extensions/actions/workflows/main.yml/badge.svg
+        :target: https://github.com/walkIT-nl/orthanc-server-extensions/actions/workflows/main.yml
         :alt: Build and test status
 
 A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts. It focusses on
