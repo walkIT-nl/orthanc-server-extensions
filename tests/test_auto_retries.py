@@ -1,12 +1,13 @@
 import logging
+
 import respx
 
 from orthanc_ext import event_dispatcher
+from orthanc_ext.http_utilities import create_internal_client
 from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.auto_retries import (
     handle_failed_forwarding_job, calculate_delay, ONE_MINUTE, ONE_DAY)
-from orthanc_ext.http_utilities import create_internal_client
 
 orthanc = OrthancApiHandler()
 client = create_internal_client('https://localhost:8042')

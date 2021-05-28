@@ -1,7 +1,6 @@
 import json
 import logging
-
-from dataclasses import dataclass
+import dataclasses
 
 from orthanc_ext.logging_configurator import orthanc_logging
 from orthanc_ext.python_utilities import (ensure_iterable, create_reverse_type_dict)
@@ -13,7 +12,7 @@ def register_event_handlers(
         event_handlers, orthanc_module, client, logging_configuration=orthanc_logging):
     logging_configuration(orthanc_module)
 
-    @dataclass
+    @dataclasses.dataclass
     class ChangeEvent:
         change_type: int
         resource_type: int
@@ -30,7 +29,6 @@ def register_event_handlers(
 
     event_types = create_type_index(orthanc_module.ChangeType)
     resource_types = create_type_index(orthanc_module.ResourceType)
-
     event_handlers = {k: ensure_iterable(v) for k, v in event_handlers.items()}
 
     def unhandled_event_logger(event, _):

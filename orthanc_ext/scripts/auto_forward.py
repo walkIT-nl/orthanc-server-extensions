@@ -1,5 +1,6 @@
-import logging
 import dataclasses
+import logging
+
 import httpx
 
 from typing import Callable, Iterable

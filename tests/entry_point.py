@@ -2,12 +2,10 @@
 """
 
 import logging
-import orthanc_ext.event_dispatcher
+
+import orthanc  # NOQA provided by the plugin runtime.
 
 from orthanc_ext import event_dispatcher
-
-# Pprovided by the plugin runtime.
-import orthanc
 
 
 def log_event(param):
@@ -31,4 +29,4 @@ event_dispatcher.register_event_handlers({
     orthanc.ChangeType.ORTHANC_STARTED:
         [log_event('started'), start_maintenance_cycle, show_system_info],
     orthanc.ChangeType.ORTHANC_STOPPED: log_event('stopped')
-}, orthanc, orthanc_ext.event_dispatcher.create_client(orthanc))
+}, orthanc, event_dispatcher.create_client(orthanc))

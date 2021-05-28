@@ -1,8 +1,9 @@
+import dataclasses
 import logging
+
 import httpx
 import respx
 
-from dataclasses import dataclass
 from orthanc_ext import event_dispatcher
 from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
@@ -10,7 +11,7 @@ from orthanc_ext.orthanc import OrthancApiHandler
 orthanc = OrthancApiHandler()
 
 
-@dataclass
+@dataclasses.dataclass
 class ChangeEvent:
     change: orthanc.ChangeType = orthanc.ChangeType.UNKNOWN
     resource_type: int = orthanc.ResourceType.NONE

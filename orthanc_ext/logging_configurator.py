@@ -1,5 +1,5 @@
+import enum
 import logging
-from enum import Enum
 
 
 def python_logging(_, default_level=logging.INFO):
@@ -38,7 +38,7 @@ class OrthancLogHandler(logging.Handler):
             logging.Formatter(fmt='[%(filename)s:%(lineno)s] %(message)s').format(record))
 
 
-class OrthancLevel(Enum):
+class OrthancLevel(enum.Enum):
     DEFAULT = ('default', 'WARNING')
     VERBOSE = ('verbose', 'INFO')
     TRACE = ('trace', 'DEBUG')
