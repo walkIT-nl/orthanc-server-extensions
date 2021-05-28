@@ -13,6 +13,10 @@ Orthanc Server Extensions
         :target: https://orthanc-server-extensions.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://github.com/walkIT-nl/orthanc-server-extensions/actions/workflows/main.yml/badge.svg
+        :target: https://github.com/walkIT-nl/orthanc-server-extensions/actions/workflows/main.yml/badge.svg
+        :alt: Build and test status
+
 
 A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts. It focusses on
 integration and orchestration scripts, like study routing, event notifications and audit logging.
