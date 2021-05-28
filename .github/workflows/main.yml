@@ -1,4 +1,4 @@
-name: Health Data Interop Gateway build and tests
+name: Build and tests
 on:
   push:
     branches: [ main ]
