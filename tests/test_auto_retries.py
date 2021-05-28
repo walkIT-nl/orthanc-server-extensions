@@ -88,7 +88,7 @@ def test_on_failure_should_resubmit_job(caplog):
             'CompletionTime': '20210210T084351.430751',
             'Type': 'DicomModalityStore'
         })
-    resubmit = respx.post('/jobs/job-uuid/resubmit').respond(200)
+    resubmit = respx.post('/jobs/job-uuid/resubmit').respond(200)  # NOQA
     event_dispatcher.register_event_handlers(
         {orthanc.ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},
         orthanc,
@@ -97,5 +97,6 @@ def test_on_failure_should_resubmit_job(caplog):
     caplog.set_level(logging.DEBUG)
     orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')
     assert job.called
+    # XXX
     # assert resubmit.called
     assert caplog.messages[-1] == 'resubmitting job "job-uuid" after 2 seconds'
