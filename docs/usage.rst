@@ -13,16 +13,16 @@ specified in orthanc.json or as an environment variable for the Osimis docker im
     def log_event(evt, session):
        logging.warn(evt.resource_id)
 
-    event_dispatcher.register_event_handlers({orthanc.ChangeType.STABLE_STUDY: log_event}, orthanc_module=orthanc,
+    event_dispatcher.register_event_handlers({types.ChangeType.STABLE_STUDY: log_event}, orthanc_module=orthanc,
                                              session=event_dispatcher.create_session(orthanc))
 
 To unit test the log_event handler with pytest, use::
 
     from orthanc_ext.orthanc import OrthancApiHandler
-    event_dispatcher.register_event_handlers({orthanc.ChangeType.STABLE_STUDY: log_event}, orthanc_module=OrthancApiHandler(),
+    event_dispatcher.register_event_handlers({types.ChangeType.STABLE_STUDY: log_event}, orthanc_module=OrthancApiHandler(),
                                              session=requests)
     def test_shall_log_on_change(caplog):
-        orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, "resource-uuid")
+        orthanc.on_change(types.ChangeType.STABLE_STUDY, types.ResourceType.STUDY, "resource-uuid")
 
         assert 'resource-uuid' in caplog.text
 
@@ -42,11 +42,11 @@ To integration test a handler, use::
         # BaseUrlSession allows usage equivalent to RestApiPost
         return session.get('/system').json()
 
-    event_dispatcher.register_event_handlers({orthanc.ChangeType.ORTHANC_STARTED: get_system_status}, orthanc_module=orthanc,
+    event_dispatcher.register_event_handlers({types.ChangeType.ORTHANC_STARTED: get_system_status}, orthanc_module=orthanc,
                                              session=session)
 
     def test_get_system_status_shall_return_version():
-        system_info, = orthanc.on_change(orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, '')
+        system_info, = orthanc.on_change(types.ChangeType.ORTHANC_STARTED, types.ResourceType.NONE, '')
 
         assert system_info.get('Version') is not None
 

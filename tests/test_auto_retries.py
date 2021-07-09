@@ -7,7 +7,8 @@ from orthanc_ext.http_utilities import create_internal_client
 from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.auto_retries import (
-    handle_failed_forwarding_job, calculate_delay, ONE_MINUTE, ONE_DAY)
+    ONE_DAY, ONE_MINUTE, calculate_delay, handle_failed_forwarding_job)
+from orthanc_ext.types import ChangeType
 
 orthanc = OrthancApiHandler()
 client = create_internal_client('https://localhost:8042')
@@ -68,12 +69,12 @@ def test_should_not_resubmit_other_job_types(caplog):
             'Type': 'CreateDicomZip'
         })
     event_dispatcher.register_event_handlers(
-        {orthanc.ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},
+        {ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},
         orthanc,
         client,
         logging_configuration=python_logging)
     caplog.set_level(logging.DEBUG)
-    orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')
+    orthanc.on_change(ChangeType.JOB_FAILURE, '', 'job-uuid')
     assert job.called
     assert caplog.messages[-1] == 'not retrying "CreateDicomZip" job "job-uuid"'
 
@@ -90,12 +91,12 @@ def test_on_failure_should_resubmit_job(caplog):
         })
     resubmit = respx.post('/jobs/job-uuid/resubmit').respond(200)  # NOQA
     event_dispatcher.register_event_handlers(
-        {orthanc.ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},
+        {ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},
         orthanc,
         client,
         logging_configuration=python_logging)
     caplog.set_level(logging.DEBUG)
-    orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')
+    orthanc.on_change(ChangeType.JOB_FAILURE, '', 'job-uuid')
     assert job.called
     # XXX
     # assert resubmit.called
