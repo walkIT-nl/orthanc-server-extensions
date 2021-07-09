@@ -1,5 +1,6 @@
 import enum
 import logging
+import sys
 
 
 def python_logging(_, default_level=logging.INFO):
@@ -13,12 +14,16 @@ def python_logging(_, default_level=logging.INFO):
     return fmt
 
 
-def orthanc_logging(orthanc_module, default_level=logging.INFO):
-    """Configures orthanc logging. Useful when orthanc is configured to write
-    to a log file."""
-    logger = logging.getLogger()
-    logger.setLevel(default_level)
-    logger.addHandler(OrthancLogHandler(orthanc_module))
+def configure_orthanc_logging():
+
+    def orthanc_logging(orthanc_module, default_level=logging.INFO):
+        """Configures orthanc logging. Useful when orthanc is configured to write to a log file"""
+        logger = logging.getLogger()
+        logger.setLevel(default_level)
+        logger.addHandler(logging.StreamHandler(sys.stderr))
+        logger.addHandler(OrthancLogHandler(orthanc_module))
+
+    return orthanc_logging
 
 
 class OrthancLogHandler(logging.Handler):

@@ -1,4 +1,4 @@
-FROM osimis/orthanc
+FROM osimis/orthanc:21.5.1
 
 RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y openssl
 
