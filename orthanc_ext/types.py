@@ -63,3 +63,4 @@ if __name__ == '__main__':
         source_file.write(f'# from {CHANGE_TYPE_URL}\n')
         source_file.write('\n')
         source_file.write(ast.unparse(module))
+        source_file.write('\n')
