@@ -1,5 +1,5 @@
 try:
-    from ._types import ChangeType, ResourceType
+    from ._types import ChangeType, ResourceType  # NOQA; facades the _types module.
 except ImportError:
     pass
 
@@ -15,40 +15,45 @@ RESOURCE_TYPE_URL = (
 
 RESOURCE_TYPE_REGEX = 'sdk_OrthancPluginResourceType_Type.*"([A-Z_]+)".*\(([0-9]+)\)'
 
-
-def _enum_ast_from_defs(enum_name, defs):
-    constants = []
-    for (name, value) in defs + [('UNKNOWN', '999')]:
-        constants.append(
-            ast.Assign(
-                targets=[ast.Name(id=name, ctx=ast.Store())],
-                value=ast.Constant(value=int(value)),
-                lineno=None))
-    new_enum_ast = ast.ClassDef(
-        name=enum_name,
-        bases=[ast.Name(id='enum.Enum', ctx=ast.Load())],
-        keywords=[],
-        body=[constants],
-        decorator_list=[])
-    return new_enum_ast
-
-
 if __name__ == '__main__':
     import ast
     import datetime
     import os.path
     import re
+    import sys
 
     import httpx
 
+    if not hasattr(ast, 'unparse'):
+        print(
+            'This script relies on the `unparse` function to be present. '
+            'It should be in Python 3.9 and up.')
+        sys.exit(1)
+
+    def _enum_ast_from_items(name: str, items: list[tuple[str, str]]) -> ast.ClassDef:
+        constants = []
+        for (key, value) in items + [('UNKNOWN', '999')]:
+            constants.append(
+                ast.Assign(
+                    targets=[ast.Name(id=key, ctx=ast.Store())],
+                    value=ast.Constant(value=int(value)),
+                    lineno=None))
+        new_enum_ast = ast.ClassDef(
+            name=name,
+            bases=[ast.Name(id='enum.Enum', ctx=ast.Load())],
+            keywords=[],
+            body=[constants],
+            decorator_list=[])
+        return new_enum_ast
+
     response = httpx.get(CHANGE_TYPE_URL)
     response.raise_for_status()
-    changetype_enum = _enum_ast_from_defs(
+    changetype_enum = _enum_ast_from_items(
         'ChangeType', re.findall(CHANGE_TYPE_REGEX, response.text))
 
     response = httpx.get(RESOURCE_TYPE_URL)
     response.raise_for_status()
-    resourcetype_enum = _enum_ast_from_defs(
+    resourcetype_enum = _enum_ast_from_items(
         'ResourceType', re.findall(RESOURCE_TYPE_REGEX, response.text))
 
     module = ast.Module(
