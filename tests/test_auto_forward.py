@@ -9,18 +9,17 @@ from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.orthanc_utilities import \
     get_metadata_of_first_instance_of_series
 from orthanc_ext.scripts.auto_forward import (DicomReceivedMatcher, forward_dicom)
-from orthanc_ext.types import ChangeType
 
 orthanc = OrthancApiHandler()
 client = create_internal_client('https://localhost:8042')
 
 
 def register_and_trigger_handler(matchers):
-    register_event_handlers({ChangeType.STABLE_STUDY: forward_dicom(matchers)},
+    register_event_handlers({orthanc.ChangeType.STABLE_STUDY: forward_dicom(matchers)},
                             orthanc,
                             client,
                             logging_configuration=python_logging)
-    orthanc.on_change(ChangeType.STABLE_STUDY, '', 'study-uuid')
+    orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, '', 'study-uuid')
 
 
 def is_not_dicom_origin(resource_id, client):

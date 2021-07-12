@@ -11,9 +11,9 @@ from orthanc_ext.types import ChangeType, ResourceType
 
 @dataclasses.dataclass
 class ChangeEvent:
-    change_type: int
-    resource_type: int
-    resource_id: str
+    change_type: int = ChangeType.UNKNOWN
+    resource_type: int = ResourceType.NONE
+    resource_id: str = None
 
     def __str__(self):
         return (
