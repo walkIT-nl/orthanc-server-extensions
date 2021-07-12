@@ -17,8 +17,8 @@ class ChangeEvent:
 
     def __str__(self):
         return (
-            f'ChangeEvent(change_type={ChangeType(self.change_type)!r}, '
-            f'resource_type={ResourceType(self.resource_type)!r}, '
+            f'ChangeEvent(change_type={ChangeType(self.change_type)._name_}, '
+            f'resource_type={ResourceType(self.resource_type)._name_}, '
             f'resource_id="{self.resource_id}")')
 
 
