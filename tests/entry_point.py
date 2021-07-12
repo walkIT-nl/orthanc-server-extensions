@@ -6,7 +6,6 @@ import logging
 import orthanc  # NOQA provided by the plugin runtime.
 
 from orthanc_ext import event_dispatcher
-from orthanc_ext.types import ChangeType, ResourceType
 
 
 def log_event(param):
