@@ -23,7 +23,7 @@ class ChangeEvent:
 
 
 def unhandled_event_logger(event, _):
-    logging.error(f'no handler registered for {ChangeType(event.change_type)}')
+    logging.error(f'no handler registered for {ChangeType(event.change_type)._name_}')
 
 
 def register_event_handlers(
