@@ -40,7 +40,7 @@ if __name__ == '__main__':
                     lineno=None))
         new_enum_ast = ast.ClassDef(
             name=name,
-            bases=[ast.Name(id='enum.Enum', ctx=ast.Load())],
+            bases=[ast.Name(id='enum.IntEnum', ctx=ast.Load())],
             keywords=[],
             body=[constants],
             decorator_list=[])

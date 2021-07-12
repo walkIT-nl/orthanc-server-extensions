@@ -5,7 +5,8 @@ import logging
 
 import orthanc  # NOQA provided by the plugin runtime.
 
-from orthanc_ext import event_dispatcher, types
+from orthanc_ext import event_dispatcher
+from orthanc_ext.types import ChangeType, ResourceType
 
 
 def log_event(param):
@@ -26,7 +27,7 @@ def show_system_info(_, client):
 
 
 event_dispatcher.register_event_handlers({
-    types.ChangeType.ORTHANC_STARTED:
-        [log_event('started'), start_maintenance_cycle, show_system_info],
-    types.ChangeType.ORTHANC_STOPPED: log_event('stopped')
+    ChangeType.ORTHANC_STARTED: [log_event('started'), start_maintenance_cycle, show_system_info],
+    ChangeType.ORTHANC_STOPPED:
+        log_event('stopped')
 }, orthanc, event_dispatcher.create_client(orthanc))

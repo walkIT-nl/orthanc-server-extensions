@@ -6,9 +6,14 @@ This will allow you quickly evolve your python scripts and make them easy to
 integration test as well.
 """
 import uuid
+from orthanc_ext.types import ChangeType, ResourceType
 
 
 class OrthancApiHandler(object):
+
+    ChangeType = ChangeType
+
+    ResourceType = ResourceType
 
     @staticmethod
     def GenerateRestApiAuthorizationToken():
