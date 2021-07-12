@@ -6,8 +6,9 @@ from orthanc_ext.event_dispatcher import register_event_handlers
 from orthanc_ext.http_utilities import create_internal_client
 from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
-from orthanc_ext.orthanc_utilities import (get_metadata_of_first_instance_of_series)
-from orthanc_ext.scripts.auto_forward import (forward_dicom, DicomReceivedMatcher)
+from orthanc_ext.orthanc_utilities import \
+    get_metadata_of_first_instance_of_series
+from orthanc_ext.scripts.auto_forward import (DicomReceivedMatcher, forward_dicom)
 
 orthanc = OrthancApiHandler()
 client = create_internal_client('https://localhost:8042')

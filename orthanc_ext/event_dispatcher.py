@@ -1,38 +1,35 @@
+import dataclasses
 import json
 import logging
-import dataclasses
 
-from orthanc_ext.logging_configurator import orthanc_logging
-from orthanc_ext.python_utilities import (ensure_iterable, create_reverse_type_dict)
 from orthanc_ext.http_utilities import (
-    create_internal_client, get_rest_api_base_url, get_certificate)
+    create_internal_client, get_certificate, get_rest_api_base_url)
+from orthanc_ext.logging_configurator import orthanc_logging
+from orthanc_ext.python_utilities import ensure_iterable
+from orthanc_ext.types import ChangeType, ResourceType
+
+
+@dataclasses.dataclass
+class ChangeEvent:
+    change_type: int = ChangeType.UNKNOWN
+    resource_type: int = ResourceType.NONE
+    resource_id: str = None
+
+    def __str__(self):
+        return (
+            f'ChangeEvent(change_type={ChangeType(self.change_type)._name_}, '
+            f'resource_type={ResourceType(self.resource_type)._name_}, '
+            f'resource_id="{self.resource_id}")')
+
+
+def unhandled_event_logger(event, _):
+    logging.error(f'no handler registered for {ChangeType(event.change_type)._name_}')
 
 
 def register_event_handlers(
         event_handlers, orthanc_module, client, logging_configuration=orthanc_logging):
     logging_configuration(orthanc_module)
-
-    @dataclasses.dataclass
-    class ChangeEvent:
-        change_type: int
-        resource_type: int
-        resource_id: str
-
-        def __str__(self):
-            return (
-                f'ChangeEvent(change_type={event_types.get(self.change_type)}, '
-                f'resource_type={resource_types.get(self.resource_type)}, '
-                f'resource_id="{self.resource_id}")')
-
-    def create_type_index(orthanc_type):
-        return create_reverse_type_dict(orthanc_type)
-
-    event_types = create_type_index(orthanc_module.ChangeType)
-    resource_types = create_type_index(orthanc_module.ResourceType)
     event_handlers = {k: ensure_iterable(v) for k, v in event_handlers.items()}
-
-    def unhandled_event_logger(event, _):
-        logging.debug(f'no handler registered for {event_types[event.change_type]}')
 
     def OnChange(change_type, resource_type, resource_id):
         handlers = event_handlers.get(change_type, [unhandled_event_logger])
