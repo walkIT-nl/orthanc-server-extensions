@@ -27,7 +27,7 @@ def show_system_info(_, client):
 
 
 event_dispatcher.register_event_handlers({
-    ChangeType.ORTHANC_STARTED: [log_event('started'), start_maintenance_cycle, show_system_info],
-    ChangeType.ORTHANC_STOPPED:
-        log_event('stopped')
+    orthanc.ChangeType.ORTHANC_STARTED:
+        [log_event('started'), start_maintenance_cycle, show_system_info],
+    orthanc.ChangeType.ORTHANC_STOPPED: log_event('stopped')
 }, orthanc, event_dispatcher.create_client(orthanc))
