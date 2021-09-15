@@ -12,5 +12,5 @@ httpx==0.18.1
 pre-commit
 pytest-runner==5.3.0
 pytest==6.2.3
-respx==0.17.0
+respx==0.17.1
 yapf==0.31.0
