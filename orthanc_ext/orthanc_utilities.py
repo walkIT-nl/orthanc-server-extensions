@@ -10,6 +10,13 @@ def anonymize(client, series_id):
     return resp.json()
 
 
+def get_parent_study_url(client, series_id):
+    resp = client.get(f'/series/{series_id}')
+    resp.raise_for_status()
+    series = resp.json()
+    return f"/studies/{series['ParentStudy']}"
+
+
 def get_metadata_of_first_instance_of_series(client, series_id, metadata_key):
     instances = client.get(f'/series/{series_id}/instances').json()
     assert len(instances) > 0, f'expected at least one instance in series {series_id}'
