@@ -5,6 +5,7 @@ on:
 if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
 jobs:
     publish-to-pypi:
+        runs-on: ubuntu-20.04
         steps:
             -   uses: pypa/gh-action-pypi-publish@release/v1
                 with:
