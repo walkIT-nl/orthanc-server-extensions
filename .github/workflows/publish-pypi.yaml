@@ -8,6 +8,9 @@ jobs:
         runs-on: ubuntu-20.04
         steps:
             -   name: build-distribution
+                uses: actions/setup-python@v2
+                with:
+                    python-version: '3.9'
             -   run: |
                     python setup.py sdist
             -   name: publish
