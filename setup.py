@@ -15,7 +15,7 @@ setup_requirements = ['pytest-runner', ]
 
 test_requirements = ['pytest>=3', 'respx', ]
 
-classifiers=[
+classifiers = [
     'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: GNU Affero General Public License v3',
@@ -24,7 +24,7 @@ classifiers=[
     'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
-    ]  # yapf: disable
+]  # yapf: disable
 
 setup(
     author='WalkIT',
@@ -33,7 +33,7 @@ setup(
     classifiers=classifiers,
     description=(
         "An Orthanc python plugin based framework to extend Orthanc's "
-        "feature set with testable Python scripts "),
+        'feature set with testable Python scripts '),
     install_requires=requirements,
     license='GNU Affero General Public License v3',
     long_description=readme + '\n\n' + history,
