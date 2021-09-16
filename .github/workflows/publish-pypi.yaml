@@ -7,7 +7,7 @@ jobs:
     publish-to-pypi:
         runs-on: ubuntu-20.04
         steps:
-            -   uses: actions/checkout@master
+            -   uses: actions/checkout@main
             -   name: Set up Python 3.9
                 uses: actions/setup-python@v1
                 with:
