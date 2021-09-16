@@ -27,7 +27,7 @@ class ModificationRequest:
     KeepPrivateTags: bool = False
     Permissive: bool = True
 
-    Keep: list[str] = dataclasses.field(
+    Keep: list = dataclasses.field(
         default_factory=lambda: ['StudyDescription', 'SeriesDescription'])
 
 
