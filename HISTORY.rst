@@ -2,6 +2,14 @@
 History
 =======
 
+3.2.0 (2021-09-16)
+------------------
+
+* Replace requests/responses library by httpx/respx
+* Add support for anonymization and re-identification using study merge
+* Many smaller and bigger refactorings
+* Dependency updates
+
 3.1.1 (2021-02-11)
 ------------------
 
