@@ -1,6 +1,7 @@
 """
 Convenience methods to work with the Orthanc REST API
 """
+from http.client import NOT_FOUND
 
 
 def anonymize(client, series_id):
@@ -21,5 +22,7 @@ def get_metadata_of_first_instance_of_series(client, series_id, metadata_key):
     instances = client.get(f'/series/{series_id}/instances').json()
     assert len(instances) > 0, f'expected at least one instance in series {series_id}'
     resp = client.get(f'/instances/{instances[0]["ID"]}/metadata/{metadata_key}')
+    if resp.status_code in [NOT_FOUND]:
+        return None
     resp.raise_for_status()
     return resp.text
