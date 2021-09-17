@@ -2,7 +2,12 @@
 History
 =======
 
-3.2.0 (2021-09-16)
+3.2.7 (2021-09-17)
+------------------
+* Small resilience fix for httpx (more conservative timeouts)
+* get_metadata_of_first_instance_of_series() will now return None for unknown keys
+
+3.2.6 (2021-09-16)
 ------------------
 
 * Replace requests/responses library by httpx/respx
