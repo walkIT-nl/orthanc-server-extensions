@@ -14,5 +14,6 @@ def get_certificate(config):
 def create_internal_client(base_url, token='', cert=None) -> httpx.Client:
     return httpx.Client(
         base_url=base_url,
+        timeout=httpx.Timeout(300, connect=30),
         verify=cert if cert is not None else False,
         headers={'Authorization': token})
