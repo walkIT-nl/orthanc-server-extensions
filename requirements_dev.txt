@@ -8,7 +8,7 @@ coverage==6.1.1
 Sphinx==3.5.4
 twine==3.4.1
 
-httpx==0.18.1
+httpx==0.21.1
 pre-commit
 pytest-runner==5.3.0
 pytest==6.2.3
