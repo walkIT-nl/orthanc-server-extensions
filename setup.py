@@ -11,7 +11,7 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ['httpx', ]
 
-setup_requirements = ['pytest-runner', ]
+setup_requirements = []
 
 test_requirements = ['pytest>=3', 'respx', ]
 
@@ -24,6 +24,7 @@ classifiers = [
     'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
 ]  # yapf: disable
 
 setup(
