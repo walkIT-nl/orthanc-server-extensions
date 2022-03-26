@@ -1,0 +1,22 @@
+name: Publish to pypi
+on:
+    push:
+        branches: [ main ]
+        tags: [ -v* ]
+jobs:
+    publish-to-pypi:
+        runs-on: ubuntu-20.04
+        steps:
+            -   uses: actions/checkout@main
+            -   name: Set up Python 3.9
+                uses: actions/setup-python@v1
+                with:
+                    python-version: 3.9
+            -   name: build-distribution
+                run: |
+                    python setup.py sdist
+            -   name: publish
+                uses: pypa/gh-action-pypi-publish@release/v1
+                with:
+                    user: __token__
+                    password: ${{ secrets.PYPI_API_TOKEN_ORTHANC_SERVER_EXTENSIONS }}

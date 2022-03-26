@@ -70,6 +70,12 @@ Ready to contribute? Here's how to set up `orthanc-server-extensions` for local 
     $ cd orthanc-server-extensions/
     $ python setup.py develop
 
+3b. Install commit hooks
+
+To achieve code consistency, `orthanc-server-extensions` uses a number of (commit hooks).   (https://pre-commit.com/). Install them by running:
+
+    $ pre-commit install
+
 4. Create a branch for local development::
 
     $ git checkout -b name-of-your-bugfix-or-feature
