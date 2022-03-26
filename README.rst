@@ -13,6 +13,9 @@ Orthanc Server Extensions
         :target: https://orthanc-server-extensions.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://github.com/walkIT-nl/orthanc-server-extensions/actions/workflows/main.yml/badge.svg
+        :target: https://github.com/walkIT-nl/orthanc-server-extensions/actions/workflows/main.yml
+        :alt: Build and test status
 
 A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts. It focusses on
 integration and orchestration scripts, like study routing, event notifications and audit logging.
@@ -36,7 +39,7 @@ With this library, you can start from the unit tests, move to integration tests,
 Enable testability: the Orthanc API is provided as a module which is not easy to mock in a clean way.
 Orthanc server extensions provide a few simple abstractions that keep functions clean and independently testable.
 
-Requests was chosen as a base library to access the Orthanc API, rather than orthanc.RestApi*, because it is well known,
+Httpx was chosen as a base library to access the Orthanc API, rather than orthanc.RestApi*, because it is well known,
 developer friendly, and external API access avoids deadlocks in the Python plugin (before this was solved in 3.1).
 
 

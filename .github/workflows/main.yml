@@ -1,0 +1,29 @@
+name: Build and tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+jobs:
+  build:
+    strategy:
+      matrix:
+        config:
+        # [Python version, tox env]
+        - ["3.9",   "py39"]
+        - ["3.8",   "py38"]
+        - ["3.7",   "py37"]
+    runs-on: ubuntu-latest
+    name: ${{ matrix.config[1] }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config[0] }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox
+    - name: Test runner
+      run: tox -e ${{ matrix.config[1] }}

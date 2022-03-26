@@ -1,13 +1,17 @@
-pip==21.1
+pip==21.3.1
 bump2version==1.0.1
 wheel==0.36.2
 watchdog==2.0.3
-flake8==3.9.1
+flake8==4.0.1
 tox==3.23.0
-coverage==5.5
+coverage==6.1.1
 Sphinx==3.5.4
 twine==3.4.1
 
-pytest==6.2.3
 pytest-runner==5.3.1
+pytest==7.0.1
 responses==0.13.3
+httpx==0.18.1
+pre-commit
+respx==0.17.0
+yapf==0.31.0

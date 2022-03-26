@@ -11,6 +11,10 @@ services:
             ORTHANC__HTTP_PORT: 8042
             ORTHANC__PYTHON_SCRIPT: "/python/entry_point.py"
 
+            ORTHANC__REGISTERED_USERS: |
+                {"demo": "demo"}
+
+
         ports:
             - "127.0.0.1:4242:4242"
             - "127.0.0.1:8042:8042"

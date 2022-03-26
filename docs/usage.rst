@@ -14,13 +14,13 @@ specified in orthanc.json or as an environment variable for the Osimis docker im
        logging.warn(evt.resource_id)
 
     event_dispatcher.register_event_handlers({orthanc.ChangeType.STABLE_STUDY: log_event}, orthanc_module=orthanc,
-                                             requests_session=event_dispatcher.create_session(orthanc))
+                                             session=event_dispatcher.create_session(orthanc))
 
 To unit test the log_event handler with pytest, use::
 
     from orthanc_ext.orthanc import OrthancApiHandler
     event_dispatcher.register_event_handlers({orthanc.ChangeType.STABLE_STUDY: log_event}, orthanc_module=OrthancApiHandler(),
-                                             requests_session=requests)
+                                             session=requests)
     def test_shall_log_on_change(caplog):
         orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, "resource-uuid")
 
@@ -43,7 +43,7 @@ To integration test a handler, use::
         return session.get('/system').json()
 
     event_dispatcher.register_event_handlers({orthanc.ChangeType.ORTHANC_STARTED: get_system_status}, orthanc_module=orthanc,
-                                             requests_session=session)
+                                             session=session)
 
     def test_get_system_status_shall_return_version():
         system_info, = orthanc.on_change(orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, '')
