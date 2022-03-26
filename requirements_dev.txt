@@ -8,7 +8,7 @@ coverage==6.1.1
 Sphinx==3.5.4
 twine==3.4.1
 
-pytest-runner==5.3.1
+pytest-runner==6.0.0
 pytest==7.0.1
 responses==0.13.3
 httpx==0.18.1
