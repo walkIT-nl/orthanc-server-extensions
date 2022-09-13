@@ -1,0 +1,15 @@
+pip
+bump2version
+wheel
+watchdog
+flake8
+tox
+coverage
+Sphinx
+twine
+
+pytest
+httpx
+pre-commit
+respx
+yapf
