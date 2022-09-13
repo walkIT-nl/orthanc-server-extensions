@@ -1,3 +1,4 @@
+version: "3"
 services:
     orthanc:
         image: local/orthanc
@@ -8,12 +9,11 @@ services:
             ORTHANC__SSL_CERTIFICATE: "/ssl/keyAndCert.pem"
 
             ORTHANC__PYTHON_VERBOSE: "false"
-            ORTHANC__HTTP_PORT: 8042
+            ORTHANC__HTTP_PORT: "8042"
             ORTHANC__PYTHON_SCRIPT: "/python/entry_point.py"
 
             ORTHANC__REGISTERED_USERS: |
                 {"demo": "demo"}
-
 
         ports:
             - "127.0.0.1:4242:4242"
