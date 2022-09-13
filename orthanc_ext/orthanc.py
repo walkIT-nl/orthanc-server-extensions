@@ -5,6 +5,7 @@ external Orthanc instance.
 This will allow you quickly evolve your python scripts and make them easy to
 integration test as well.
 """
+import json
 import uuid
 
 
@@ -45,9 +46,12 @@ class OrthancApiHandler(object):
         # not defined by orthanc
         UNKNOWN = 999
 
+    def __init__(self, config={}):
+        self.config = config
+
     @staticmethod
     def GenerateRestApiAuthorizationToken():
-        return uuid.uuid4()
+        return str(uuid.uuid4())
 
     def RegisterOnChangeCallback(self, change_callback):
         self.change_callback = change_callback
@@ -63,3 +67,6 @@ class OrthancApiHandler(object):
 
     def LogError(self, message):
         print(f'ERROR: {message}')
+
+    def GetConfiguration(self):
+        return json.dumps(self.config)
