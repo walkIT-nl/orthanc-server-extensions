@@ -98,7 +98,8 @@ def test_create_session_shall_pass_ssl_cert_if_ssl_is_enabled_and_report_issues(
         event_dispatcher.create_session(configured_orthanc)
 
 
-def test_create_session_shall_not_pass_ssl_cert_if_ssl_is_disabled():
+def test_create_session_shall_not_raise_an_exception_for_a_non_existing_ssl_cert_if_ssl_is_disabled(
+):
     configured_orthanc = OrthancApiHandler(
         config={
             'SslEnabled': False,
@@ -106,4 +107,9 @@ def test_create_session_shall_not_pass_ssl_cert_if_ssl_is_disabled():
         })
 
     client = event_dispatcher.create_session(configured_orthanc)
+
+    assert_client_is_successfully_constructed(client)
+
+
+def assert_client_is_successfully_constructed(client):
     assert client is not None
