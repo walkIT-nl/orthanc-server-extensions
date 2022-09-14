@@ -1,3 +1,5 @@
+from typing import Union
+
 import httpx
 
 
@@ -8,12 +10,12 @@ def get_rest_api_base_url(config):
 
 
 def get_certificate(config):
-    return config.get('SslCertificate', False)
+    return False if not config.get('SslEnabled', False) else config.get('SslCertificate', False)
 
 
-def create_internal_client(base_url, token='', cert=None) -> httpx.Client:
+def create_internal_client(base_url, token='', cert: Union[str, bool] = False) -> httpx.Client:
     return httpx.Client(
         base_url=base_url,
         timeout=httpx.Timeout(300, connect=30),
-        verify=cert if cert is not None else False,
+        verify=cert,
         headers={'Authorization': token})

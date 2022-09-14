@@ -3,6 +3,7 @@ import logging
 
 import httpx
 import respx
+import pytest
 
 from orthanc_ext import event_dispatcher
 from orthanc_ext.logging_configurator import python_logging
@@ -85,3 +86,30 @@ def test_event_shall_have_human_readable_representation(caplog):
     orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'uuid')
     assert 'change_type=STABLE_STUDY' in caplog.text
     assert 'resource_type=STUDY' in caplog.text
+
+
+def test_create_session_shall_pass_ssl_cert_if_ssl_is_enabled_and_report_issues():
+    configured_orthanc = OrthancApiHandler(
+        config={
+            'SslEnabled': True,
+            'SslCertificate': 'path-to-non-existing-file'
+        })
+    with pytest.raises(IOError, match='.*TLS CA.*invalid path: path-to-non-existing-file'):
+        event_dispatcher.create_session(configured_orthanc)
+
+
+def test_create_session_shall_not_raise_an_exception_for_a_non_existing_ssl_cert_if_ssl_is_disabled(
+):
+    configured_orthanc = OrthancApiHandler(
+        config={
+            'SslEnabled': False,
+            'SslCertificate': 'path-to-non-existing-file'
+        })
+
+    client = event_dispatcher.create_session(configured_orthanc)
+
+    assert_client_is_successfully_constructed(client)
+
+
+def assert_client_is_successfully_constructed(client):
+    assert client is not None
