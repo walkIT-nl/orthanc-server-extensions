@@ -16,7 +16,7 @@ setup_requirements = []
 test_requirements = ['pytest>=3', 'respx', ]
 
 classifiers = [
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: GNU Affero General Public License v3',
     'Natural Language :: English',
@@ -24,12 +24,13 @@ classifiers = [
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
 ]  # yapf: disable
 
 setup(
     author='WalkIT',
     author_email='code@walkit.nl',
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     classifiers=classifiers,
     description=(
         "An Orthanc python plugin based framework to extend Orthanc's "
