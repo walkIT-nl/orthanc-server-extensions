@@ -9,6 +9,9 @@ Sphinx
 twine
 
 pytest
+dockercontext
+pytest-asyncio
+
 httpx
 pre-commit
 respx
