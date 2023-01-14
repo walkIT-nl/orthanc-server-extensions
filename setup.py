@@ -45,7 +45,8 @@ setup(
     setup_requires=setup_requirements,
     extras_require={
         'nats-event-publisher': ['cloudevents', 'nats-py'],
-        'kafka-event-publisher': ['cloudevents', 'kafka-python3']
+        'kafka-event-publisher': ['cloudevents', 'kafka-python3'],
+        'rabbitmq-event-publisher': ['cloudevents', 'aio-pika']
     },
     test_suite='tests',
     tests_require=test_requirements,
