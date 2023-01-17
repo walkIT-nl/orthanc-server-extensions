@@ -1,5 +1,3 @@
-from contextlib import closing
-
 import pytest
 from dockercontext import container as containerlib
 import nats
@@ -13,11 +11,13 @@ def nats_server():
 
 @pytest.mark.asyncio
 async def test_response(nats_server):
-    with closing(await nats.connect('localhost:54222')) as nc:
+    nc = await nats.connect('localhost:54222')
+    try:
         sub = await nc.subscribe('foo')
 
         await nc.publish('foo', b'Hello from Python!')
 
         msg = await sub.next_msg(timeout=2)
         assert msg.subject == 'foo'
-        print('Received:', msg)
+    finally:
+        await nc.close()
