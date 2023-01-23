@@ -4,7 +4,7 @@ from kafka3.admin import KafkaAdminClient, NewTopic
 import pytest
 from dockercontext import container as containerlib
 
-exposed_port = 59092
+exposed_port = 9092
 bootstrap_server = f'localhost:{exposed_port}'
 
 
