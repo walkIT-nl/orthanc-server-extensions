@@ -28,17 +28,34 @@ def capture(event):
         event.resource_id = incoming_event.resource_id
         event.orthanc = local_orthanc
 
+        return event
+
     return capture_impl
+
+
+async def capture_async(evt, session):
+    assert evt is not None
+    assert session is not None
+    return 42
 
 
 def test_registered_callback_should_be_triggered_on_change_event():
     event = ChangeEvent()
     event_dispatcher.register_event_handlers(
         {orthanc.ChangeType.STABLE_STUDY: capture(event)}, orthanc, httpx)
-    orthanc.on_change(orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
-    assert event.resource_id == 'resource-uuid'
-    assert event.resource_type == orthanc.ResourceType.STUDY
-    assert event.orthanc is not None
+    sync_result = orthanc.on_change(
+        orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
+    assert sync_result[0].resource_id == 'resource-uuid'
+    assert sync_result[0].resource_type == orthanc.ResourceType.STUDY
+    assert sync_result[0].orthanc is not None
+
+
+def test_registered_async_callback_should_be_triggered_on_change_event():
+    event_dispatcher.register_event_handlers(
+        {orthanc.ChangeType.STABLE_STUDY: capture_async}, orthanc, httpx)
+    async_result = orthanc.on_change(
+        orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
+    assert [42] == async_result
 
 
 def test_all_registered_callbacks_should_be_triggered_on_change_event():

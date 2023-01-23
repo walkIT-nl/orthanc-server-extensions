@@ -1,3 +1,5 @@
+import asyncio
+import inspect
 import json
 import logging
 from dataclasses import dataclass
@@ -41,7 +43,11 @@ def register_event_handlers(
         return_values = []
         for handler in handlers:
             event = ChangeEvent(change_type, resource_type, resource_id)
-            return_values.append(handler(event, requests_session))
+            return_value = handler(event, requests_session)
+            if inspect.isawaitable(return_value):
+                return_values.append(asyncio.run(return_value))
+            else:
+                return_values.append(return_value)
         return return_values
 
     orthanc_module.RegisterOnChangeCallback(OnChange)
