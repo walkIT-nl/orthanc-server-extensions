@@ -75,7 +75,7 @@ def test_should_not_resubmit_other_job_types(caplog):
     caplog.set_level(logging.DEBUG)
     orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')
     assert job.called
-    assert caplog.messages[-1] == 'not retrying "CreateDicomZip" job "job-uuid"'
+    assert caplog.messages[-2] == 'not retrying "CreateDicomZip" job "job-uuid"'
 
 
 @respx.mock
@@ -99,4 +99,4 @@ def test_on_failure_should_resubmit_job(caplog):
     assert job.called
     # XXX
     # assert resubmit.called
-    assert caplog.messages[-1] == 'resubmitting job "job-uuid" after 2 seconds'
+    assert caplog.messages[-2] == 'resubmitting job "job-uuid" after 2 seconds'

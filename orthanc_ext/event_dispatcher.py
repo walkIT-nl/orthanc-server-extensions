@@ -38,17 +38,24 @@ def register_event_handlers(
     def unhandled_event_logger(event, _):
         logging.debug(f'no handler registered for {event_types[event.change_type]}')
 
+    async def on_change_async(async_handlers):
+        return await asyncio.gather(*async_handlers)
+
     def OnChange(change_type, resource_type, resource_id):
-        handlers = event_handlers.get(change_type, [unhandled_event_logger])
-        return_values = []
-        for handler in handlers:
-            event = ChangeEvent(change_type, resource_type, resource_id)
-            return_value = handler(event, requests_session)
-            if inspect.isawaitable(return_value):
-                return_values.append(asyncio.run(return_value))
-            else:
-                return_values.append(return_value)
-        return return_values
+        event = ChangeEvent(change_type, resource_type, resource_id)
+        awaitable_or_return_value = [
+            handler(event, requests_session)
+            for handler in event_handlers.get(change_type, [unhandled_event_logger])
+        ]
+
+        return_values = [
+            handler for handler in awaitable_or_return_value if not inspect.isawaitable(handler)
+        ]
+        async_handlers = [
+            handler for handler in awaitable_or_return_value if inspect.isawaitable(handler)
+        ]
+
+        return return_values + asyncio.run(on_change_async(async_handlers))
 
     orthanc_module.RegisterOnChangeCallback(OnChange)
 

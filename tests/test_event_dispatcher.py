@@ -55,7 +55,7 @@ def test_registered_async_callback_should_be_triggered_on_change_event():
         {orthanc.ChangeType.STABLE_STUDY: capture_async}, orthanc, httpx)
     async_result = orthanc.on_change(
         orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
-    assert [42] == async_result
+    assert async_result == [42]
 
 
 def test_all_registered_callbacks_should_be_triggered_on_change_event():
