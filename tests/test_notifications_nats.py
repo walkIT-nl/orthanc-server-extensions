@@ -23,8 +23,11 @@ def nats_server():
 
 async def create_stream(evt, _):
     nc = await nats.connect('localhost:54222')
-    js = nc.jetstream()
-    await js.add_stream(name='orthanc-events', subjects=['onchange'])
+    try:
+        js = nc.jetstream()
+        await js.add_stream(name='orthanc-events', subjects=['onchange'])
+    finally:
+        await nc.close()
 
 
 async def notify_nats(evt, _):
@@ -34,7 +37,7 @@ async def notify_nats(evt, _):
         ack = await js.publish(
             'onchange', json.dumps(dataclasses.asdict(evt)).encode(), stream='orthanc-events')
     finally:
-        nc.close()
+        await nc.close()
     return ack
 
 

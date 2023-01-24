@@ -1,5 +1,4 @@
 import time
-from contextlib import closing
 
 import aio_pika
 import pytest
@@ -16,9 +15,8 @@ def docker_rabbitmq():
 
 @pytest.mark.asyncio
 async def test_create_queue(docker_rabbitmq):
-    with closing(
-            await aio_pika.connect_robust('amqp://guest:guest@127.0.0.1:55672/')) as connection:
-
+    connection = await aio_pika.connect_robust('amqp://guest:guest@127.0.0.1:55672/')
+    try:
         queue_name = 'orthanc-events'
         channel = await connection.channel()
         queue = await channel.declare_queue(queue_name, auto_delete=True)
@@ -35,3 +33,5 @@ async def test_create_queue(docker_rabbitmq):
                     break
 
         assert 'Hello orthanc-events' == messages[0]
+    finally:
+        await connection.close()
