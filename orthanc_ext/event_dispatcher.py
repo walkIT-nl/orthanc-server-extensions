@@ -39,7 +39,14 @@ def register_event_handlers(
         logging.debug(f'no handler registered for {event_types[event.change_type]}')
 
     async def on_change_async(async_handlers):
-        return await asyncio.gather(*async_handlers)
+        return_values = await asyncio.gather(*async_handlers, return_exceptions=True)
+
+        for index, return_value in enumerate(return_values):
+            if isinstance(return_value, Exception):
+                logging.exception(
+                    'execution of %s failed; %s', async_handlers[index], repr(return_value))
+
+        return return_values
 
     def OnChange(change_type, resource_type, resource_id):
         event = ChangeEvent(change_type, resource_type, resource_id)

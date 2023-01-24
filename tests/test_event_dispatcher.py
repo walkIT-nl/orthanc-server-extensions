@@ -1,5 +1,7 @@
+import asyncio
 import dataclasses
 import logging
+import time
 
 import httpx
 import respx
@@ -33,9 +35,22 @@ def capture(event):
     return capture_impl
 
 
-async def capture_async(evt, session):
-    assert evt is not None
-    assert session is not None
+def async_func(return_value):
+
+    async def async_func_impl(evt, session):
+        assert evt is not None
+        assert session is not None
+        return return_value
+
+    return async_func_impl
+
+
+async def async_fail(*_):
+    raise Exception('failed')
+
+
+async def async_sleep(*_):
+    await asyncio.sleep(0.5)
     return 42
 
 
@@ -50,12 +65,49 @@ def test_registered_callback_should_be_triggered_on_change_event():
     assert sync_result[0].orthanc is not None
 
 
-def test_registered_async_callback_should_be_triggered_on_change_event():
+def test_registered_async_callback_should_be_run_to_completion_on_change_event():
     event_dispatcher.register_event_handlers(
-        {orthanc.ChangeType.STABLE_STUDY: capture_async}, orthanc, httpx)
+        {orthanc.ChangeType.STABLE_STUDY: async_func(42)}, orthanc, httpx)
     async_result = orthanc.on_change(
         orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
     assert async_result == [42]
+
+
+def test_multiple_registered_async_callbacks_should_be_run_to_completion_on_change_event():
+    event_dispatcher.register_event_handlers(
+        {orthanc.ChangeType.STABLE_STUDY: [async_func(42), async_func(41)]}, orthanc, httpx)
+    async_result = orthanc.on_change(
+        orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
+    assert async_result == [42, 41]
+
+
+def test_all_async_callbacks_should_be_run_to_completion_on_change_event_if_one_fails(caplog):
+    event_dispatcher.register_event_handlers(
+        {orthanc.ChangeType.STABLE_STUDY: [async_fail, async_func(42),
+                                           async_func(41)]}, orthanc, httpx)
+    async_result = orthanc.on_change(
+        orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
+
+    exception = async_result[0]
+    assert async_result == [exception, 42, 41]
+    assert exception.args == ('failed', )
+    assert type(exception) == Exception
+
+    assert 'async_fail' in caplog.messages[0]
+    assert "Exception('failed')" in caplog.messages[0]
+
+
+def test_async_callbacks_should_be_run_concurrently_on_change_event():
+    awaitables = []
+    start = time.perf_counter()
+    for i in range(0, 10):
+        awaitables.append(async_sleep)
+    event_dispatcher.register_event_handlers(
+        {orthanc.ChangeType.STABLE_STUDY: awaitables}, orthanc, httpx)
+    async_result = orthanc.on_change(
+        orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
+    assert async_result == [42, 42, 42, 42, 42, 42, 42, 42, 42, 42]
+    assert time.perf_counter() - start < 1
 
 
 def test_all_registered_callbacks_should_be_triggered_on_change_event():
