@@ -50,16 +50,17 @@ def register_event_handlers(
 
     def OnChange(change_type, resource_type, resource_id):
         event = ChangeEvent(change_type, resource_type, resource_id)
-        awaitable_or_return_value = [
-            handler(event, requests_session)
-            for handler in event_handlers.get(change_type, [unhandled_event_logger])
-        ]
+        handlers = event_handlers.get(change_type, [unhandled_event_logger])
 
         return_values = [
-            handler for handler in awaitable_or_return_value if not inspect.isawaitable(handler)
+            handler(event, requests_session)
+            for handler in handlers
+            if not inspect.iscoroutinefunction(handler)
         ]
         async_handlers = [
-            handler for handler in awaitable_or_return_value if inspect.isawaitable(handler)
+            handler(event, requests_session)
+            for handler in handlers
+            if inspect.iscoroutinefunction(handler)
         ]
 
         return return_values + asyncio.run(on_change_async(async_handlers))
