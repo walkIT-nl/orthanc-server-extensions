@@ -7,6 +7,8 @@ from dockercontext import container as containerlib
 
 from orthanc_ext import event_dispatcher
 from orthanc_ext.orthanc import OrthancApiHandler
+from orthanc_ext.scripts.event_publisher import convert_change_event_to_message, \
+    convert_message_to_change_event
 
 
 @pytest.fixture(scope='session')
@@ -37,8 +39,9 @@ async def notify_rabbitmq(evt, _):
     try:
         queue_name = 'orthanc-events'
         channel = await connection.channel()
+        _, message = convert_change_event_to_message(evt)
         await channel.default_exchange.publish(
-            aio_pika.Message(body=f'Hello {queue_name}'.encode()), routing_key=queue_name,
+            aio_pika.Message(body=message), routing_key=queue_name,
         )
     finally:
         connection.close()
@@ -71,7 +74,11 @@ def test_registered_callback_should_be_notify_change_event(docker_rabbitmq, orth
     orthanc.on_change(
         orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, 'resource-uuid')
 
-    return_values = orthanc.on_change(
+    _, msg = orthanc.on_change(
         orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
 
-    assert return_values == [None, b'Hello orthanc-events']
+    assert convert_message_to_change_event({}, msg).data == {
+        'change_type': 9,
+        'resource_id': 'resource-uuid',
+        'resource_type': 1
+    }

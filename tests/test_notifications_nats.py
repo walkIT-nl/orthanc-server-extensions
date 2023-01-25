@@ -1,13 +1,12 @@
-import dataclasses
-import json
-
+import httpx
+import nats
 import pytest
 from dockercontext import container as containerlib
-import nats
-import httpx
 
 from orthanc_ext import event_dispatcher
 from orthanc_ext.orthanc import OrthancApiHandler
+from orthanc_ext.scripts.event_publisher import convert_change_event_to_message, \
+    convert_message_to_change_event
 
 
 @pytest.fixture(scope='session')
@@ -34,8 +33,8 @@ async def notify_nats(evt, _):
     nc = await nats.connect('localhost:54222')
     try:
         js = nc.jetstream()
-        ack = await js.publish(
-            'onchange', json.dumps(dataclasses.asdict(evt)).encode(), stream='orthanc-events')
+        _, message = convert_change_event_to_message(evt)
+        ack = await js.publish('onchange', message, stream='orthanc-events')
     finally:
         await nc.close()
     return ack
@@ -62,11 +61,10 @@ def test_registered_callback_should_be_notify_change_event(nats_server, orthanc)
     orthanc.on_change(
         orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, 'resource-uuid')
 
-    return_values = orthanc.on_change(
+    ack, message = orthanc.on_change(
         orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
+    event = convert_message_to_change_event({}, data=message.data)
 
-    assert nats.js.api.PubAck(
-        stream='orthanc-events', seq=1, domain=None, duplicate=None) == return_values[0]
-    assert 'onchange' == return_values[1].subject
-    assert b'{"change_type": 9, ' \
-           b'"resource_type": 1, "resource_id": "resource-uuid"}' == return_values[1].data
+    assert ack == nats.js.api.PubAck(stream='orthanc-events', seq=1, domain=None, duplicate=None)
+    assert message.subject == 'onchange'
+    assert event.data == {'change_type': 9, 'resource_type': 1, 'resource_id': 'resource-uuid'}

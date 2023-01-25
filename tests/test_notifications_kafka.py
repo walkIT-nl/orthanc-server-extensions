@@ -6,6 +6,8 @@ from kafka.admin import KafkaAdminClient, NewTopic
 
 from orthanc_ext import event_dispatcher
 from orthanc_ext.orthanc import OrthancApiHandler
+from orthanc_ext.scripts.event_publisher import convert_change_event_to_message, \
+    convert_message_to_change_event
 
 exposed_port = 9092
 bootstrap_server = f'localhost:{exposed_port}'
@@ -34,17 +36,22 @@ def test_registered_callback_should_be_notify_change_event(docker_kafka, orthanc
     orthanc.on_change(
         orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, 'resource-uuid')
 
-    return_values = orthanc.on_change(
+    _, msg = orthanc.on_change(
         orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
+    assert convert_message_to_change_event({}, msg).data == {
+        'change_type': 9,
+        'resource_id': 'resource-uuid',
+        'resource_type': 1
+    }
 
-    assert return_values == [None, b'some_message_bytes']
 
-
-async def notify_kafka(*_):
+async def notify_kafka(evt, *_):
     producer = AIOKafkaProducer(security_protocol='PLAINTEXT', bootstrap_servers=bootstrap_server)
     await producer.start()
     try:
-        await producer.send_and_wait('orthanc-events', b'some_message_bytes')
+        _, event = convert_change_event_to_message(evt)
+        await producer.send_and_wait('orthanc-events', event)
+
     finally:
         await producer.stop()
 
