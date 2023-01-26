@@ -32,6 +32,12 @@ Features
 * run (integration) tests for your Orthanc python scripts
 * publish events to Kafka, RabbitMQ and NATS
 
+Modules
+-------
+* auto_retries: retry failed jobs
+* auto_forward: forward DICOM to external systems based on python match functions
+* anonymization: anonymize DICOM Series using the Orthanc API
+
 Why this library was written
 ----------------------------
 
