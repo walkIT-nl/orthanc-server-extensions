@@ -5,12 +5,18 @@ from dockercontext import container as containerlib
 from kafka.admin import KafkaAdminClient, NewTopic
 
 from orthanc_ext import event_dispatcher
+from orthanc_ext.http_utilities import create_internal_client, ClientType
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.event_publisher import convert_change_event_to_message, \
     convert_message_to_change_event
 
 exposed_port = 9092
 bootstrap_server = f'localhost:{exposed_port}'
+
+
+@pytest.fixture
+def async_client():
+    return create_internal_client('https://localhost:8042', '', client_type=ClientType.ASYNC)
 
 
 @pytest.fixture(scope='session')
@@ -27,11 +33,11 @@ def docker_kafka():
         yield container
 
 
-def test_registered_callback_should_be_notify_change_event(docker_kafka, orthanc):
+def test_registered_callback_should_be_notify_change_event(docker_kafka, orthanc, async_client):
     event_dispatcher.register_event_handlers({
         orthanc.ChangeType.ORTHANC_STARTED: [create_stream],
         orthanc.ChangeType.STABLE_STUDY: [notify_kafka, get_first_message],
-    }, orthanc, httpx)
+    }, orthanc, httpx, async_client)
 
     orthanc.on_change(
         orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, 'resource-uuid')

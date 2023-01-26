@@ -4,6 +4,7 @@ import pytest
 from dockercontext import container as containerlib
 
 from orthanc_ext import event_dispatcher
+from orthanc_ext.http_utilities import create_internal_client, ClientType
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.event_publisher import convert_change_event_to_message, \
     convert_message_to_change_event
@@ -18,6 +19,11 @@ def orthanc():
 def nats_server():
     with containerlib.Context('nats:latest', {'4222/tcp': 54222}, '-js') as container:
         yield container
+
+
+@pytest.fixture
+def async_client():
+    return create_internal_client('https://localhost:8042', '', client_type=ClientType.ASYNC)
 
 
 async def create_stream(evt, _):
@@ -52,11 +58,11 @@ async def get_first_message(evt, _):
         await nc.close()
 
 
-def test_registered_callback_should_be_notify_change_event(nats_server, orthanc):
+def test_registered_callback_should_be_notify_change_event(nats_server, orthanc, async_client):
     event_dispatcher.register_event_handlers({
         orthanc.ChangeType.STABLE_STUDY: [notify_nats, get_first_message],
         orthanc.ChangeType.ORTHANC_STARTED: [create_stream]
-    }, orthanc, httpx)
+    }, orthanc, httpx, async_client)
 
     orthanc.on_change(
         orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, 'resource-uuid')

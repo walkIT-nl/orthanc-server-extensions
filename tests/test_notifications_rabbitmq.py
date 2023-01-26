@@ -6,6 +6,7 @@ import pytest
 from dockercontext import container as containerlib
 
 from orthanc_ext import event_dispatcher
+from orthanc_ext.http_utilities import create_internal_client, ClientType
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.event_publisher import convert_change_event_to_message, \
     convert_message_to_change_event
@@ -14,6 +15,11 @@ from orthanc_ext.scripts.event_publisher import convert_change_event_to_message,
 @pytest.fixture(scope='session')
 def orthanc():
     yield OrthancApiHandler()
+
+
+@pytest.fixture
+def async_client():
+    return create_internal_client('https://localhost:8042', '', client_type=ClientType.SYNC)
 
 
 @pytest.fixture(scope='session')
@@ -44,7 +50,7 @@ async def notify_rabbitmq(evt, _):
             aio_pika.Message(body=message), routing_key=queue_name,
         )
     finally:
-        connection.close()
+        await connection.close()
 
 
 async def get_first_message(*_):
@@ -65,11 +71,11 @@ async def get_first_message(*_):
         await connection.close()
 
 
-def test_registered_callback_should_be_notify_change_event(docker_rabbitmq, orthanc):
+def test_registered_callback_should_be_notify_change_event(docker_rabbitmq, orthanc, async_client):
     event_dispatcher.register_event_handlers({
         orthanc.ChangeType.ORTHANC_STARTED: [create_queue],
         orthanc.ChangeType.STABLE_STUDY: [notify_rabbitmq, get_first_message],
-    }, orthanc, httpx)
+    }, orthanc, httpx, async_client)
 
     orthanc.on_change(
         orthanc.ChangeType.ORTHANC_STARTED, orthanc.ResourceType.NONE, 'resource-uuid')

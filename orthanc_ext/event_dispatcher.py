@@ -5,13 +5,17 @@ import logging
 from dataclasses import dataclass
 
 from orthanc_ext.http_utilities import create_internal_client, get_rest_api_base_url, \
-    get_certificate
+    get_certificate, ClientType
 from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.python_utilities import ensure_iterable, create_reverse_type_dict
 
 
 def register_event_handlers(
-        event_handlers, orthanc_module, requests_session, logging_configuration=python_logging):
+        event_handlers,
+        orthanc_module,
+        sync_client,
+        async_client=None,
+        logging_configuration=python_logging):
     logging_configuration(orthanc_module)
 
     @dataclass
@@ -48,17 +52,22 @@ def register_event_handlers(
 
         return return_values
 
+    def get_validated_async_client(async_client):
+        if async_client is None:
+            raise ValueError('a configured async_client is required when using async handlers')
+        return async_client
+
     def OnChange(change_type, resource_type, resource_id):
         event = ChangeEvent(change_type, resource_type, resource_id)
         handlers = event_handlers.get(change_type, [unhandled_event_logger])
 
         return_values = [
-            handler(event, requests_session)
+            handler(event, sync_client)
             for handler in handlers
             if not inspect.iscoroutinefunction(handler)
         ]
         async_handlers = [
-            handler(event, requests_session)
+            handler(event, get_validated_async_client(async_client))
             for handler in handlers
             if inspect.iscoroutinefunction(handler)
         ]
@@ -68,8 +77,8 @@ def register_event_handlers(
     orthanc_module.RegisterOnChangeCallback(OnChange)
 
 
-def create_session(orthanc):
+def create_session(orthanc, client_type=ClientType.SYNC):
     config = json.loads(orthanc.GetConfiguration())
     return create_internal_client(
         get_rest_api_base_url(config), orthanc.GenerateRestApiAuthorizationToken(),
-        get_certificate(config))
+        get_certificate(config), client_type)
