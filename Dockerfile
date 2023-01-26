@@ -1,6 +1,6 @@
 FROM osimis/orthanc:22.9.0-full
 
-RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y openssl
+RUN apt-get update && ACCEPT_EULA=Y apt-get dist-upgrade -y && apt-get install -y openssl
 
 COPY server_cert.cnf .
 RUN openssl req  -nodes -new -x509 -days 3650 -keyout /etc/ssl/private/server.key -out /etc/ssl/certs/server.pem -config server_cert.cnf
