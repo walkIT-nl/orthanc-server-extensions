@@ -12,7 +12,7 @@ def create_valid_orthanc_cloud_event(evt):
                              data=dataclasses.asdict(evt))
 
 
-def convert_change_event_to_message(evt) -> bytes:
+def convert_change_event_to_message(evt) -> tuple[dict[str, str], bytes]:
     return to_structured(create_valid_orthanc_cloud_event(evt))
 
 
