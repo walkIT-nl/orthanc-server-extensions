@@ -46,7 +46,7 @@ def register_event_handlers(
         return_values = await asyncio.gather(*async_handlers, return_exceptions=True)
 
         for index, return_value in enumerate(return_values):
-            if isinstance(return_value, Exception):
+            if isinstance(return_value, BaseException):
                 logging.exception(
                     'execution of %s failed; %s', async_handlers[index], repr(return_value))
 
