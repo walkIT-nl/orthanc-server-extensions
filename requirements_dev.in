@@ -12,6 +12,7 @@ mypy
 pytest
 dockercontext
 pytest-asyncio
+pytest-html
 
 httpx
 pre-commit
