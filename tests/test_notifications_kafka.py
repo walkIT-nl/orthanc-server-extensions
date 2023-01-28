@@ -1,14 +1,13 @@
 import httpx
 import pytest
-from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
+from aiokafka import AIOKafkaConsumer
 from dockercontext import container as containerlib
-from kafka.admin import KafkaAdminClient, NewTopic
 
 from orthanc_ext import event_dispatcher
 from orthanc_ext.http_utilities import create_internal_client, ClientType
 from orthanc_ext.orthanc import OrthancApiHandler
-from orthanc_ext.scripts.event_publisher import convert_change_event_to_message, \
-    convert_message_to_change_event
+from orthanc_ext.scripts.event_publisher import convert_message_to_change_event
+from orthanc_ext.scripts.kafka_event_publisher import create_stream, publish_to_kafka
 
 exposed_port = 9092
 bootstrap_server = f'localhost:{exposed_port}'
@@ -36,7 +35,7 @@ def docker_kafka():
 def test_registered_callback_should_be_notify_change_event(docker_kafka, orthanc, async_client):
     event_dispatcher.register_event_handlers({
         orthanc.ChangeType.ORTHANC_STARTED: [create_stream],
-        orthanc.ChangeType.STABLE_STUDY: [notify_kafka, get_first_message],
+        orthanc.ChangeType.STABLE_STUDY: [publish_to_kafka, get_first_message],
     }, orthanc, httpx, async_client)
 
     orthanc.on_change(
@@ -49,17 +48,6 @@ def test_registered_callback_should_be_notify_change_event(docker_kafka, orthanc
         'resource_id': 'resource-uuid',
         'resource_type': 1
     }
-
-
-async def notify_kafka(evt, *_):
-    producer = AIOKafkaProducer(security_protocol='PLAINTEXT', bootstrap_servers=bootstrap_server)
-    await producer.start()
-    try:
-        _, event = convert_change_event_to_message(evt)
-        await producer.send_and_wait('orthanc-events', event)
-
-    finally:
-        await producer.stop()
 
 
 async def get_first_message(evt, *_):
@@ -80,10 +68,3 @@ async def get_first_message(evt, *_):
         await consumer.stop()
 
     return msg.value
-
-
-def create_stream(*_):
-    admin_client = KafkaAdminClient(bootstrap_servers=bootstrap_server)
-    admin_client.create_topics(
-        new_topics=[NewTopic(name='orthanc-events', num_partitions=1, replication_factor=1)],
-        validate_only=False)

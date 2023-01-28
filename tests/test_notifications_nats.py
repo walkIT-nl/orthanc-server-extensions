@@ -6,8 +6,9 @@ from dockercontext import container as containerlib
 from orthanc_ext import event_dispatcher
 from orthanc_ext.http_utilities import create_internal_client, ClientType
 from orthanc_ext.orthanc import OrthancApiHandler
-from orthanc_ext.scripts.event_publisher import convert_change_event_to_message, \
-    convert_message_to_change_event
+from orthanc_ext.scripts.event_publisher import convert_message_to_change_event
+
+from orthanc_ext.scripts.nats_event_publisher import publish_to_nats, create_stream
 
 
 @pytest.fixture(scope='session')
@@ -26,26 +27,6 @@ def async_client():
     return create_internal_client('https://localhost:8042', '', client_type=ClientType.ASYNC)
 
 
-async def create_stream(evt, _):
-    nc = await nats.connect('localhost:54222')
-    try:
-        js = nc.jetstream()
-        await js.add_stream(name='orthanc-events', subjects=['onchange'])
-    finally:
-        await nc.close()
-
-
-async def notify_nats(evt, _):
-    nc = await nats.connect('localhost:54222')
-    try:
-        js = nc.jetstream()
-        _, message = convert_change_event_to_message(evt)
-        ack = await js.publish('onchange', message, stream='orthanc-events')
-    finally:
-        await nc.close()
-    return ack
-
-
 async def get_first_message(evt, _):
     nc = await nats.connect('localhost:54222')
     try:
@@ -60,8 +41,8 @@ async def get_first_message(evt, _):
 
 def test_registered_callback_should_be_notify_change_event(nats_server, orthanc, async_client):
     event_dispatcher.register_event_handlers({
-        orthanc.ChangeType.STABLE_STUDY: [notify_nats, get_first_message],
-        orthanc.ChangeType.ORTHANC_STARTED: [create_stream]
+        orthanc.ChangeType.ORTHANC_STARTED: [create_stream],
+        orthanc.ChangeType.STABLE_STUDY: [publish_to_nats, get_first_message],
     }, orthanc, httpx, async_client)
 
     orthanc.on_change(

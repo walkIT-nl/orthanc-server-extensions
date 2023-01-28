@@ -8,8 +8,8 @@ from dockercontext import container as containerlib
 from orthanc_ext import event_dispatcher
 from orthanc_ext.http_utilities import create_internal_client, ClientType
 from orthanc_ext.orthanc import OrthancApiHandler
-from orthanc_ext.scripts.event_publisher import convert_change_event_to_message, \
-    convert_message_to_change_event
+from orthanc_ext.scripts.event_publisher import convert_message_to_change_event
+from orthanc_ext.scripts.rabbitmq_event_publisher import create_queue, publish_to_rabbitmq
 
 
 @pytest.fixture(scope='session')
@@ -28,29 +28,6 @@ def docker_rabbitmq():
         time.sleep(10)
         print(container.container.logs().decode('ascii'))
         yield container
-
-
-async def create_queue(*_):
-    connection = await aio_pika.connect_robust('amqp://guest:guest@127.0.0.1:55672/')
-    try:
-        queue_name = 'orthanc-events'
-        channel = await connection.channel()
-        await channel.declare_queue(queue_name, auto_delete=True)
-    finally:
-        await connection.close()
-
-
-async def notify_rabbitmq(evt, _):
-    connection = await aio_pika.connect_robust('amqp://guest:guest@127.0.0.1:55672/')
-    try:
-        queue_name = 'orthanc-events'
-        channel = await connection.channel()
-        _, message = convert_change_event_to_message(evt)
-        await channel.default_exchange.publish(
-            aio_pika.Message(body=message), routing_key=queue_name,
-        )
-    finally:
-        await connection.close()
 
 
 async def get_first_message(*_):
@@ -74,7 +51,7 @@ async def get_first_message(*_):
 def test_registered_callback_should_be_notify_change_event(docker_rabbitmq, orthanc, async_client):
     event_dispatcher.register_event_handlers({
         orthanc.ChangeType.ORTHANC_STARTED: [create_queue],
-        orthanc.ChangeType.STABLE_STUDY: [notify_rabbitmq, get_first_message],
+        orthanc.ChangeType.STABLE_STUDY: [publish_to_rabbitmq, get_first_message],
     }, orthanc, httpx, async_client)
 
     orthanc.on_change(
