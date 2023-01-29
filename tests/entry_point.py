@@ -7,6 +7,7 @@ import orthanc  # NOQA provided by the plugin runtime.
 
 from orthanc_ext import event_dispatcher
 from orthanc_ext.http_utilities import ClientType
+from orthanc_ext.scripts.nats_event_publisher import create_stream, publish_to_nats
 
 
 def log_event(param):
@@ -28,7 +29,8 @@ def show_system_info(_, client):
 
 event_dispatcher.register_event_handlers({
     orthanc.ChangeType.ORTHANC_STARTED:
-        [log_event('started'), start_maintenance_cycle, show_system_info],
+        [log_event('started'), create_stream, start_maintenance_cycle, show_system_info],
+    orthanc.ChangeType.STABLE_STUDY: [publish_to_nats],
     orthanc.ChangeType.ORTHANC_STOPPED: log_event('stopped')
 }, orthanc, event_dispatcher.create_session(orthanc),
                                          event_dispatcher.create_session(
