@@ -2,6 +2,7 @@ import asyncio
 import dataclasses
 import logging
 import time
+from functools import partial
 
 import httpx
 import respx
@@ -41,14 +42,10 @@ def capture(event):
     return capture_impl
 
 
-def async_func(return_value):
-
-    async def async_func_impl(evt, session):
-        assert evt is not None
-        assert session is not None
-        return return_value
-
-    return async_func_impl
+async def async_func(return_value, evt, session):
+    assert evt is not None
+    assert session is not None
+    return return_value
 
 
 async def async_fail(*_):
@@ -77,7 +74,7 @@ def test_registered_callback_should_be_triggered_on_change_event():
 
 def test_registered_async_callback_should_be_run_to_completion_on_change_event(async_client):
     event_dispatcher.register_event_handlers(
-        {orthanc.ChangeType.STABLE_STUDY: async_func(42)}, orthanc, httpx, async_client)
+        {orthanc.ChangeType.STABLE_STUDY: partial(async_func, 42)}, orthanc, httpx, async_client)
     async_result = orthanc.on_change(
         orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
     assert async_result == [42]
@@ -86,8 +83,8 @@ def test_registered_async_callback_should_be_run_to_completion_on_change_event(a
 def test_multiple_registered_async_callbacks_should_be_run_to_completion_on_change_event(
         async_client):
     event_dispatcher.register_event_handlers(
-        {orthanc.ChangeType.STABLE_STUDY: [async_func(42), async_func(41)]}, orthanc, httpx,
-        async_client)
+        {orthanc.ChangeType.STABLE_STUDY: [partial(async_func, 42),
+                                           partial(async_func, 41)]}, orthanc, httpx, async_client)
     async_result = orthanc.on_change(
         orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
     assert async_result == [42, 41]
@@ -95,10 +92,12 @@ def test_multiple_registered_async_callbacks_should_be_run_to_completion_on_chan
 
 def test_all_async_callbacks_should_be_run_to_completion_on_change_event_if_one_or_more_fail(
         caplog, async_client):
-    event_dispatcher.register_event_handlers(
-        {orthanc.ChangeType.STABLE_STUDY: [async_fail, async_get,
-                                           async_func(42),
-                                           async_func(41)]}, orthanc, httpx, async_client)
+    event_dispatcher.register_event_handlers({
+        orthanc.ChangeType.STABLE_STUDY:
+            [async_fail, async_get,
+             partial(async_func, 42),
+             partial(async_func, 41)]
+    }, orthanc, httpx, async_client)
     async_result = orthanc.on_change(
         orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
 
