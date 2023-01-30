@@ -28,7 +28,8 @@ integration and orchestration, like study routing, event notifications and audit
 Features
 --------
 * easily plug event handling scripts for all Orthanc's `change events`_ -
-* run asyncio functions (coroutines) for concurrent processing of a change event.
+* chain functions into a pipeline (composition)
+* run asyncio functions (coroutines) for concurrent processing of a change event
 * run (integration) tests for your Orthanc python scripts
 * publish events to Kafka, RabbitMQ and NATS
 
@@ -63,7 +64,7 @@ Developing
 ----------
 
 Write your event handling scripts and register them in ``event_dispatcher.register_event_handlers()``. Examples,
-including async functions, can be found in ``tests/test_event_dispatcher.py``.
+including the use of async functions and function composition (pipeline), can be found in ``tests/test_event_dispatcher.py``.
 
 
 Credits

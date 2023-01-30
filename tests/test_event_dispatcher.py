@@ -12,6 +12,7 @@ from orthanc_ext import event_dispatcher
 from orthanc_ext.http_utilities import create_internal_client, ClientType
 from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
+from orthanc_ext.python_utilities import pipeline
 
 orthanc = OrthancApiHandler()
 
@@ -70,6 +71,38 @@ def test_registered_callback_should_be_triggered_on_change_event():
     assert sync_result[0].resource_id == 'resource-uuid'
     assert sync_result[0].resource_type == orthanc.ResourceType.STUDY
     assert sync_result[0].orthanc is not None
+
+
+@dataclasses.dataclass
+class StableStudyEvent:
+    resource_id: str
+    StudyInstanceUid: str = None
+
+
+def embellish(evt, client) -> StableStudyEvent:
+    study = client.get(f'http://localhost/studies/{evt.resource_id}').json()
+    return StableStudyEvent(evt.resource_id, study.get('StudyInstanceUid'))
+
+
+def publish(evt: StableStudyEvent, client):
+    client.post('http://localhost/publish', json=dataclasses.asdict(evt))
+    return evt
+
+
+@respx.mock
+def test_pipeline_should_run_all_functions_to_completion_passing_results_to_the_next_function():
+    respx.get('http://localhost/studies/resource-uuid').respond(
+        200, json={'StudyInstanceUid': '1.2.3'})
+    respx.post('http://localhost/publish').respond(200)
+
+    event_dispatcher.register_event_handlers(
+        {orthanc.ChangeType.STABLE_STUDY: pipeline(embellish, publish)}, orthanc, httpx)
+    publication_response = orthanc.on_change(
+        orthanc.ChangeType.STABLE_STUDY, orthanc.ResourceType.STUDY, 'resource-uuid')
+
+    assert publication_response == [
+        StableStudyEvent(resource_id='resource-uuid', StudyInstanceUid='1.2.3')
+    ]
 
 
 def test_registered_async_callback_should_be_run_to_completion_on_change_event(async_client):
