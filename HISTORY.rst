@@ -2,6 +2,12 @@
 History
 =======
 
+3.3.0 (2022-01-30)
+------------------
+* Publish Orthanc change events to Kafka, RabbitMQ and NATS
+* Run asyncio functions (coroutines) for concurrent processing of a change event
+* Chain functions into a pipeline (composition)
+
 3.2.8 (2021-09-18)
 ------------------
 * get_metadata_of_first_instance_of_series() now propagates http errors if /instances call fails.
