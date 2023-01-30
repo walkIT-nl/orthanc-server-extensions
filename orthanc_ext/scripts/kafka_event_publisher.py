@@ -12,7 +12,7 @@ class KafkaConfig:
     topic: str = 'orthanc-events'
 
 
-async def publish_to_kafka(kafka_config, evt, _):
+async def publish_to_kafka(kafka_config: KafkaConfig, evt, _):
     producer = AIOKafkaProducer(
         security_protocol='PLAINTEXT', bootstrap_servers=kafka_config.bootstrap_server)
     await producer.start()
@@ -24,7 +24,7 @@ async def publish_to_kafka(kafka_config, evt, _):
         await producer.stop()
 
 
-def create_stream(kafka_config, *_):
+def create_stream(kafka_config: KafkaConfig, *_):
     admin_client = KafkaAdminClient(bootstrap_servers=kafka_config.bootstrap_server)
     admin_client.create_topics(
         new_topics=[NewTopic(name=kafka_config.topic, num_partitions=1, replication_factor=1)],

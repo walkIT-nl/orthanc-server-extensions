@@ -11,7 +11,7 @@ class RabbitmqConfig:
     queue_name: str = 'orthanc-events'
 
 
-async def create_queue(rabbitmq_config, *_):
+async def create_queue(rabbitmq_config: RabbitmqConfig, *_):
     connection = await aio_pika.connect_robust(rabbitmq_config.url)
     try:
         queue_name = rabbitmq_config.queue_name
@@ -21,7 +21,7 @@ async def create_queue(rabbitmq_config, *_):
         await connection.close()
 
 
-async def publish_to_rabbitmq(rabbitmq_config, evt, *_):
+async def publish_to_rabbitmq(rabbitmq_config: RabbitmqConfig, evt, *_):
     connection = await aio_pika.connect_robust(rabbitmq_config.url)
     try:
         queue_name = rabbitmq_config.queue_name
