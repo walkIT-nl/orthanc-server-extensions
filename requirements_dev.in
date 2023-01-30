@@ -7,8 +7,13 @@ tox
 coverage
 Sphinx
 twine
+mypy
 
 pytest
+dockercontext
+pytest-asyncio
+pytest-html
+
 httpx
 pre-commit
 respx

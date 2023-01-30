@@ -1,5 +1,9 @@
 version: "3"
 services:
+    nats:
+        image: nats
+        command:
+            -   '-js'
     orthanc:
         image: local/orthanc
         build: .
@@ -15,6 +19,9 @@ services:
             ORTHANC__REGISTERED_USERS: |
                 {"demo": "demo"}
 
+            NATS_URL: nats://nats
+        depends_on:
+            -   nats
         ports:
             - "127.0.0.1:4242:4242"
             - "127.0.0.1:8042:8042"

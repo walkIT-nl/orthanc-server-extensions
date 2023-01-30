@@ -7,7 +7,7 @@ from orthanc_ext.http_utilities import create_internal_client
 from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.auto_retries import (
-    handle_failed_forwarding_job, calculate_delay, ONE_MINUTE, ONE_DAY)
+    handle_failed_forwarding_job, calculate_delay, ONE_MINUTE, ONE_DAY, resubmit_job)
 
 orthanc = OrthancApiHandler()
 client = create_internal_client('https://localhost:8042')
@@ -75,12 +75,11 @@ def test_should_not_resubmit_other_job_types(caplog):
     caplog.set_level(logging.DEBUG)
     orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')
     assert job.called
-    assert caplog.messages[-1] == 'not retrying "CreateDicomZip" job "job-uuid"'
+    assert caplog.messages[-2] == 'not retrying "CreateDicomZip" job "job-uuid"'
 
 
 @respx.mock
 def test_on_failure_should_resubmit_job(caplog):
-    # TODO: figure out why expectation not met in Timer thread.
     job = respx.get('/jobs/job-uuid').respond(
         200,
         json={
@@ -88,15 +87,19 @@ def test_on_failure_should_resubmit_job(caplog):
             'CompletionTime': '20210210T084351.430751',
             'Type': 'DicomModalityStore'
         })
-    resubmit = respx.post('/jobs/job-uuid/resubmit').respond(200)  # NOQA
-    event_dispatcher.register_event_handlers(
-        {orthanc.ChangeType.JOB_FAILURE: handle_failed_forwarding_job(0.1)},
-        orthanc,
-        client,
-        logging_configuration=python_logging)
+    resubmit = respx.post('/jobs/job-uuid/resubmit').respond(200)
+
+    event_dispatcher.register_event_handlers({
+        orthanc.ChangeType.JOB_FAILURE:
+            handle_failed_forwarding_job(
+                0.1, job_runner=lambda job_id, delay, httpx_client: resubmit_job(client, job_id))
+    },
+                                             orthanc,
+                                             client,
+                                             logging_configuration=python_logging)
     caplog.set_level(logging.DEBUG)
     orthanc.on_change(orthanc.ChangeType.JOB_FAILURE, '', 'job-uuid')
     assert job.called
-    # XXX
-    # assert resubmit.called
-    assert caplog.messages[-1] == 'resubmitting job "job-uuid" after 2 seconds'
+    assert resubmit.called
+    assert caplog.messages[-4] == 'resubmitting job "job-uuid" after 2 seconds'
+    assert caplog.messages[-2] == 'resubmitted job "job-uuid"'

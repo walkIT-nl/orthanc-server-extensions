@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Union
 
 import httpx
@@ -13,8 +14,17 @@ def get_certificate(config):
     return False if not config.get('SslEnabled', False) else config.get('SslCertificate', False)
 
 
-def create_internal_client(base_url, token='', cert: Union[str, bool] = False) -> httpx.Client:
-    return httpx.Client(
+class ClientType(Enum):
+    SYNC = httpx.Client
+    ASYNC = httpx.AsyncClient
+
+
+def create_internal_client(
+        base_url,
+        token='',
+        cert: Union[str, bool] = False,
+        client_type: ClientType = ClientType.SYNC) -> httpx.Client:
+    return client_type.value(
         base_url=base_url,
         timeout=httpx.Timeout(300, connect=30),
         verify=cert,

@@ -17,8 +17,8 @@ Orthanc Server Extensions
         :target: https://github.com/walkIT-nl/orthanc-server-extensions/actions/workflows/main.yml
         :alt: Build and test status
 
-A simple Orthanc python plugin based framework to extend Orthanc’s feature set with testable python scripts. It focusses on
-integration and orchestration scripts, like study routing, event notifications and audit logging.
+A simple Orthanc python plugin based event processing framework to extend Orthanc’s feature set. It focuses on
+integration and orchestration, like study routing, event notifications and audit logging.
 
 
 * Free software: GNU Affero General Public License v3
@@ -27,8 +27,17 @@ integration and orchestration scripts, like study routing, event notifications a
 
 Features
 --------
+* easily plug event handling scripts for all Orthanc's `change events`_ -
+* chain functions into a pipeline (composition)
+* run asyncio functions (coroutines) for concurrent processing of a change event
 * run (integration) tests for your Orthanc python scripts
-* currently supports handling of `change events`_
+* publish events to Kafka, RabbitMQ and NATS
+
+Modules
+-------
+* auto_retries: retry failed jobs
+* auto_forward: forward DICOM to external systems based on python match functions
+* anonymization: anonymize DICOM Series using the Orthanc API
 
 Why this library was written
 ----------------------------
@@ -39,6 +48,8 @@ With this library, you can start from the unit tests, move to integration tests,
 Enable testability: the Orthanc API is provided as a module which is not easy to mock in a clean way.
 Orthanc server extensions provide a few simple abstractions that keep functions clean and independently testable.
 
+Improve performance: async functions will be executed concurrently, which is advantageous if the processing is I/O bound.
+
 Httpx was chosen as a base library to access the Orthanc API, rather than orthanc.RestApi*, because it is well known,
 developer friendly, and external API access avoids deadlocks in the Python plugin (before this was solved in 3.1).
 
@@ -46,8 +57,14 @@ developer friendly, and external API access avoids deadlocks in the Python plugi
 Running
 -------
 
-``docker-compose up --build`` should greet you with 'orthanc started event handled!' message and provides the first boilerplate
-to get started.
+``entry_point.py`` provides the first boilerplate to get started. Run it by issuing
+``docker-compose up --build``; you should be greeted with 'orthanc started event handled!' message, which is also published to
+
+Developing
+----------
+
+Write your event handling scripts and register them in ``event_dispatcher.register_event_handlers()``. Examples,
+including the use of async functions and function composition (pipeline), can be found in ``tests/test_event_dispatcher.py``.
 
 
 Credits
