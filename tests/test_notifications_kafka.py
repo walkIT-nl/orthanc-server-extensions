@@ -1,3 +1,5 @@
+from functools import partial
+
 import httpx
 import pytest
 from aiokafka import AIOKafkaConsumer
@@ -7,10 +9,15 @@ from orthanc_ext import event_dispatcher
 from orthanc_ext.http_utilities import create_internal_client, ClientType
 from orthanc_ext.orthanc import OrthancApiHandler
 from orthanc_ext.scripts.event_publisher import convert_message_to_change_event
-from orthanc_ext.scripts.kafka_event_publisher import create_stream, publish_to_kafka
+from orthanc_ext.scripts.kafka_event_publisher import create_stream, publish_to_kafka, KafkaConfig
 
 exposed_port = 9092
-bootstrap_server = f'localhost:{exposed_port}'
+
+
+@pytest.fixture
+def kafka_config():
+    bootstrap_server = f'localhost:{exposed_port}'
+    return KafkaConfig(bootstrap_server)
 
 
 @pytest.fixture
@@ -32,10 +39,13 @@ def docker_kafka():
         yield container
 
 
-def test_registered_callback_should_be_notify_change_event(docker_kafka, orthanc, async_client):
+def test_registered_callback_should_be_notify_change_event(
+        docker_kafka, orthanc, async_client, kafka_config):
     event_dispatcher.register_event_handlers({
-        orthanc.ChangeType.ORTHANC_STARTED: [create_stream],
-        orthanc.ChangeType.STABLE_STUDY: [publish_to_kafka, get_first_message],
+        orthanc.ChangeType.ORTHANC_STARTED: [partial(create_stream, kafka_config)],
+        orthanc.ChangeType.STABLE_STUDY:
+            [partial(publish_to_kafka, kafka_config),
+             partial(get_first_message, kafka_config)],
     }, orthanc, httpx, async_client)
 
     orthanc.on_change(
@@ -50,11 +60,11 @@ def test_registered_callback_should_be_notify_change_event(docker_kafka, orthanc
     }
 
 
-async def get_first_message(evt, *_):
+async def get_first_message(kafka_config, evt, *_):
     consumer = AIOKafkaConsumer(
         'orthanc-events',
         security_protocol='PLAINTEXT',
-        bootstrap_servers=bootstrap_server,
+        bootstrap_servers=kafka_config.bootstrap_server,
         consumer_timeout_ms=1000,
         auto_offset_reset='earliest')
     await consumer.start()
