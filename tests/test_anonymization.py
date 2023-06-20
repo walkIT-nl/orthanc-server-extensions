@@ -22,7 +22,10 @@ def test_anonymization_shall_leverage_orthanc_builtin_functionality(caplog):
         })
     anonymize_series(client, '1.2.3')
     assert store.called
-    assert caplog.messages == ['Anonymized "/series/1.2.3" to "/series/1.2.4"']
+    assert caplog.messages == [
+        'HTTP Request: POST https://localhost:8042/series/1.2.3/anonymize "HTTP/1.1 200 OK"',
+        'Anonymized "/series/1.2.3" to "/series/1.2.4"'
+    ]
 
 
 @respx.mock

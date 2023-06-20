@@ -31,7 +31,10 @@ def test_autoforward_on_match_shall_start_start_modality_store(caplog):
     store = respx.post('/modalities/pacs/store').respond(200, text='study-uuid')
     register_and_trigger_handler([DicomReceivedMatcher(lambda uid, _: True, lambda uid, _: 'pacs')])
     assert store.called
-    assert caplog.messages == ['DICOM export to modality "pacs" started for resource "study-uuid"']
+    assert caplog.messages == [
+        'HTTP Request: POST https://localhost:8042/modalities/pacs/store "HTTP/1.1 200 OK"',
+        'DICOM export to modality "pacs" started for resource "study-uuid"'
+    ]
 
 
 @respx.mock
@@ -54,9 +57,16 @@ def test_autoforward_on_multiple_matches_shall_start_start_modality_store(caplog
     assert origin.called
     assert pacs1.called
     assert pacs2.called
+
+    url = 'https://localhost:8042/'
     assert caplog.messages == [
-        'DICOM export to modality "pacs1" started for resource "study-uuid"',
-        'DICOM export to modality "pacs2" started for resource "study-uuid"'
+        f'HTTP Request: GET {url}/series/study-uuid/instances '
+        '"HTTP/1.1 200 OK"', 'HTTP Request: GET '
+        f'{url}/instances/b99cd218-ae67f0d7-70324b6b-2b095801-f858dedf/metadata/Origin '
+        '"HTTP/1.1 200 OK"', 'HTTP Request: POST {url}/modalities/pacs1/store "HTTP/1.1 '
+        '200 OK"', 'DICOM export to modality "pacs1" started for resource "study-uuid"',
+        'HTTP Request: POST {url}/modalities/pacs2/store "HTTP/1.1 '
+        '200 OK"', 'DICOM export to modality "pacs2" started for resource "study-uuid"'
     ]
 
 
