@@ -5,8 +5,8 @@ import time
 from functools import partial
 
 import httpx
-import respx
 import pytest
+import respx
 
 from orthanc_ext import event_dispatcher
 from orthanc_ext.http_utilities import create_internal_client, ClientType
