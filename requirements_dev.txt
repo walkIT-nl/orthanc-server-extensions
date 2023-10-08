@@ -204,7 +204,7 @@ twine==4.0.2
     # via -r requirements_dev.in
 typing-extensions==4.6.3
     # via mypy
-urllib3==2.0.3
+urllib3==2.0.6
     # via
     #   docker
     #   requests
