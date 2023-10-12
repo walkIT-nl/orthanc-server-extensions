@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from orthanc_ext.executor_utilities import SequentialHybridExecutor
 from orthanc_ext.http_utilities import get_rest_api_base_url, \
-    get_certificate, ClientType
+    get_certificate, OrthancClientTypeFactory, HttpxClientType
 from orthanc_ext.logging_configurator import python_logging
 from orthanc_ext.python_utilities import ensure_iterable, create_reverse_type_dict
 
@@ -67,8 +67,8 @@ def get_sync_handlers(handlers):
     return [handler for handler in handlers if not inspect.iscoroutinefunction(handler)]
 
 
-def create_session(orthanc, client_type=ClientType.SYNC):
+def create_session(orthanc, client_type: OrthancClientTypeFactory = HttpxClientType.SYNC):
     config = json.loads(orthanc.GetConfiguration())
     return client_type.create_internal_client(
         get_rest_api_base_url(config), orthanc.GenerateRestApiAuthorizationToken(),
-        get_certificate(config), client_type)
+        get_certificate(config))
