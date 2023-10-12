@@ -37,7 +37,7 @@ def create_internal_client(
         token='',
         cert: Union[str, bool] = False,
         client_type: ClientType = HttpxClientType.SYNC):
-    return client_type.value(
+    return client_type.http_client(
         base_url=base_url,
         timeout=httpx.Timeout(300, connect=30),
         verify=cert,
