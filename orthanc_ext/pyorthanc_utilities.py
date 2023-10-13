@@ -22,7 +22,7 @@ def create_internal_client(
         client_type: PyOrthancClientType = PyOrthancClientType.SYNC):
 
     # note: only difference with the httpx.Client constructor is the `base_url` positional argument.
-    return client_type.value(
+    return client_type.http_client(
         base_url,
         base_url=base_url,
         timeout=httpx.Timeout(300, connect=30),
