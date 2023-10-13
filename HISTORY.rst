@@ -2,7 +2,15 @@
 History
 =======
 
-3.3.0 (2022-01-30)
+3.5.0 (2023-10-12)
+------------------
+* Support pyOrthanc as Orthanc API client
+
+3.4.0 (2023-06-21)
+------------------
+* Improved asyncio performance
+
+3.3.0 (2023-01-30)
 ------------------
 * Publish Orthanc change events to Kafka, RabbitMQ and NATS
 * Run asyncio functions (coroutines) for concurrent processing of a change event
