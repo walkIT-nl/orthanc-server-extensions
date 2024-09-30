@@ -29,7 +29,7 @@ Features
 --------
 * easily plug event handling scripts for all Orthanc's `change events`_ -
 * chain functions into a pipeline (composition)
-* run asyncio functions (coroutines) for concurrent processing of a change event
+* run asyncio functions (coroutines) for concurrent processing of change events
 * run (integration) tests for your Orthanc python scripts
 * publish events to Kafka, RabbitMQ and NATS
 
@@ -54,7 +54,7 @@ Httpx was chosen as a base library to access the Orthanc API, rather than orthan
 developer friendly, and external API access avoids deadlocks in the Python plugin (before this was solved in 3.1).
 
 
-Running
+Getting Started
 -------
 
 ``entry_point.py`` provides the first boilerplate to get started. Run it by issuing

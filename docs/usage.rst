@@ -14,7 +14,7 @@ specified in orthanc.json or as an environment variable for the Osimis docker im
        logging.warn(evt.resource_id)
 
     event_dispatcher.register_event_handlers({orthanc.ChangeType.STABLE_STUDY: log_event}, orthanc_module=orthanc,
-                                             session=event_dispatcher.create_session(orthanc))
+                                             sync_client=event_dispatcher.create_session(orthanc))
 
 To unit test the log_event handler with pytest, use::
 
@@ -26,7 +26,7 @@ To unit test the log_event handler with pytest, use::
 
         assert 'resource-uuid' in caplog.text
 
-One can use the excellent responses_ library to stub the API responses.
+One can use the excellent respx_ library to stub the API responses.
 
 To integration test a handler, use::
 
@@ -53,4 +53,4 @@ To integration test a handler, use::
 The event_dispatcher will ensure that your API call will work the same when called from the Orthanc Python plugin.
 For more examples, see the tests/ directory in the Git repository.
 
-.. _responses: https://github.com/getsentry/responses
+.. respx: https://lundberg.github.io/respx/
