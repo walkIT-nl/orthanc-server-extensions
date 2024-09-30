@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 from typing import Union
 
@@ -14,17 +15,29 @@ def get_certificate(config):
     return False if not config.get('SslEnabled', False) else config.get('SslCertificate', False)
 
 
-class ClientType(Enum):
+@dataclass
+class OrthancClientTypeFactory:
+    http_client: type
+
+    def create_internal_client(self, *args, **kwargs):
+        return create_internal_client(*args, **kwargs, client_type=self)
+
+
+class HttpxClientType(OrthancClientTypeFactory, Enum):
     SYNC = httpx.Client
     ASYNC = httpx.AsyncClient
+
+
+# deprecated, for backward compatibility
+ClientType = HttpxClientType
 
 
 def create_internal_client(
         base_url,
         token='',
         cert: Union[str, bool] = False,
-        client_type: ClientType = ClientType.SYNC) -> httpx.Client:
-    return client_type.value(
+        client_type: ClientType = HttpxClientType.SYNC):
+    return client_type.http_client(
         base_url=base_url,
         timeout=httpx.Timeout(300, connect=30),
         verify=cert,

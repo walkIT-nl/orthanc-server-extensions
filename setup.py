@@ -46,11 +46,12 @@ setup(
     extras_require={
         'nats-event-publisher': ['cloudevents', 'nats-py'],
         'kafka-event-publisher': ['cloudevents', 'aiokafka'],
-        'rabbitmq-event-publisher': ['cloudevents', 'aio-pika']
+        'rabbitmq-event-publisher': ['cloudevents', 'aio-pika'],
+        'pyorthanc': ['pyorthanc>1.0']
     },
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/walkIT-nl/orthanc-server-extensions',
-    version='3.4.0',
+    version='3.5.1',
     zip_safe=False,
 )

@@ -48,7 +48,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Orthanc Server Python Extensions'
-copyright = '2021, WalkIT'
+copyright = '2023, WalkIT'
 author = 'WalkIT'
 
 # The version info for the project you're documenting, acts as replacement
@@ -136,14 +136,7 @@ man_pages = [(master_doc, 'orthanc_ext', 'Orthanc Server Extensions Documentatio
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
-texinfo_documents = [
-    (
-        master_doc,
-        'orthanc_ext',
-        'Orthanc Server Extensions Documentation',
-        author,
-        'orthanc_ext',
-        'One line description of project.',
-        'Miscellaneous',
-    ),
-]
+texinfo_documents = [(
+    master_doc, 'orthanc_ext', 'Orthanc Server Extensions Documentation', author, 'orthanc_ext',
+    'One line description of project.', 'Miscellaneous',
+), ]
