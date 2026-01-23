@@ -19,6 +19,8 @@ certifi==2023.11.17
     #   httpcore
     #   httpx
     #   requests
+cffi==2.0.0
+    # via cryptography
 cfgv==3.4.0
     # via pre-commit
 chardet==5.2.0
@@ -31,6 +33,8 @@ coverage[toml]==7.4.0
     # via
     #   -r requirements_dev.in
     #   pytest-cov
+cryptography==45.0.7
+    # via secretstorage
 distlib==0.3.8
     # via virtualenv
 docker==7.0.0
@@ -78,6 +82,10 @@ iniconfig==2.0.0
     # via pytest
 jaraco-classes==3.3.0
     # via keyring
+jeepney==0.9.0
+    # via
+    #   keyring
+    #   secretstorage
 jinja2==3.1.2
     # via
     #   pytest-html
@@ -102,13 +110,14 @@ nh3==0.2.15
     # via readme-renderer
 nodeenv==1.8.0
     # via pre-commit
-packaging==23.2
+packaging==26.0
     # via
     #   docker
     #   pyproject-api
     #   pytest
     #   sphinx
     #   tox
+    #   wheel
 pkginfo==1.9.6
     # via twine
 platformdirs==4.1.0
@@ -124,6 +133,8 @@ pre-commit==3.6.0
     # via -r requirements_dev.in
 pycodestyle==2.11.1
     # via flake8
+pycparser==2.23
+    # via cffi
 pyflakes==3.2.0
     # via flake8
 pygments==2.17.2
@@ -166,6 +177,8 @@ rfc3986==2.0.0
     # via twine
 rich==13.7.0
     # via twine
+secretstorage==3.3.3
+    # via keyring
 sniffio==1.3.0
     # via
     #   anyio
@@ -219,7 +232,7 @@ virtualenv==20.25.0
     #   tox
 watchdog==3.0.0
     # via -r requirements_dev.in
-wheel==0.42.0
+wheel==0.46.2
     # via -r requirements_dev.in
 yapf==0.40.2
     # via -r requirements_dev.in
